@@ -4,8 +4,8 @@ This repository is a takehome assignment for a role at Neo Financial.
 
 ## Requirements
 
-- install Docker https://docs.docker.com/engine/install/
-- install Task https://taskfile.dev/installation (optional)
+- install [Docker](https://docs.docker.com/engine/install/)
+- install [Task](https://taskfile.dev/installation) (optional)
   - if you don't want to use Task, you will need to type docker commands and their arguments manually
 
 ## Start the project

@@ -11,6 +11,10 @@ export class UuidIdentifier extends ValueObject {
     return this.fromString(uuidv4());
   }
 
+  equals(other: UuidIdentifier): boolean {
+    return this.uuid === other.uuid;
+  }
+
   toString(): string {
     return this.uuid;
   }

@@ -30,12 +30,12 @@ export class Warrior extends Character {
 
   protected calculateSpeed(): CharacterSpeed {
     return new CharacterSpeed(
-      [
-        this.dexterity.toNumber(),
-        this.dexterity.toNumber() * this.calculateModifier(0, 0.6),
-        this.intelligence.toNumber(),
-        this.intelligence.toNumber() * this.calculateModifier(0, 0.2),
-      ].reduce((prev, current) => prev + current, 0),
+      Math.round(
+        [
+          this.dexterity.toNumber() * this.calculateModifier(0, 0.6),
+          this.intelligence.toNumber() * this.calculateModifier(0, 0.2),
+        ].reduce((prev, current) => prev + current, 0),
+      ),
     );
   }
 
@@ -43,12 +43,12 @@ export class Warrior extends Character {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   protected calculateDamage(defender: Character): CharacterHealthPoints {
     return new CharacterHealthPoints(
-      [
-        this.strength.toNumber(),
-        this.strength.toNumber() * this.calculateModifier(0, 0.8),
-        this.dexterity.toNumber(),
-        this.dexterity.toNumber() * this.calculateModifier(0, 0.2),
-      ].reduce((prev, current) => prev + current, 0),
+      Math.round(
+        [
+          this.strength.toNumber() * this.calculateModifier(0, 0.8),
+          this.dexterity.toNumber() * this.calculateModifier(0, 0.2),
+        ].reduce((prev, current) => prev + current, 0),
+      ),
     );
   }
 }

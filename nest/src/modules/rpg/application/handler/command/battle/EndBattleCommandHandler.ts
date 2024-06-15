@@ -15,7 +15,7 @@ export class EndBattleCommandHandler
       await this.battles.get(command.battleId)
     ).extract() as Battle;
 
-    battle.end(command.battleLog);
+    battle.endBattle(command.battleLog);
 
     await this.battles.update(battle);
   }

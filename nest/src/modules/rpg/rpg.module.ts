@@ -18,6 +18,8 @@ import { MongooseCharacters } from './infrastructure/domain/model/character/Mong
 import { BattleSchema } from './infrastructure/persistence/mongoose/schema/battle.schema';
 import { CharacterSchema } from './infrastructure/persistence/mongoose/schema/character.schema';
 import { SearchCharactersQueryHandler } from './application/handler/query/character/SearchCharactersQueryHandler';
+import { PrepareCharacterForAttackCommandHandler } from './application/handler/command/character/PrepareCharacterForAttackCommandHandler';
+import { AttackCharacterCommandHandler } from './application/handler/command/character/AttackCharacterCommandHandler';
 
 @Module({
   imports: [
@@ -32,6 +34,8 @@ import { SearchCharactersQueryHandler } from './application/handler/query/charac
     // command handlers
     ...[
       CreateCharacterCommandHandler,
+      PrepareCharacterForAttackCommandHandler,
+      AttackCharacterCommandHandler,
       CreateBattleCommandHandler,
       EndBattleCommandHandler,
     ],

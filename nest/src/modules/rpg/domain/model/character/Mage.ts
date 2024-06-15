@@ -30,12 +30,12 @@ export class Mage extends Character {
 
   protected calculateSpeed(): CharacterSpeed {
     return new CharacterSpeed(
-      [
-        this.dexterity.toNumber(),
-        this.dexterity.toNumber() * this.calculateModifier(0, 0.4),
-        this.strength.toNumber(),
-        this.strength.toNumber() * this.calculateModifier(0, 0.1),
-      ].reduce((prev, current) => prev + current, 0),
+      Math.round(
+        [
+          this.dexterity.toNumber() * this.calculateModifier(0, 0.4),
+          this.strength.toNumber() * this.calculateModifier(0, 0.1),
+        ].reduce((prev, current) => prev + current, 0),
+      ),
     );
   }
 
@@ -43,14 +43,13 @@ export class Mage extends Character {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   protected calculateDamage(defender: Character): CharacterHealthPoints {
     return new CharacterHealthPoints(
-      [
-        this.strength.toNumber(),
-        this.strength.toNumber() * this.calculateModifier(0, 0.2),
-        this.dexterity.toNumber(),
-        this.dexterity.toNumber() * this.calculateModifier(0, 0.2),
-        this.strength.toNumber(),
-        this.strength.toNumber() * this.calculateModifier(0, 1.2),
-      ].reduce((prev, current) => prev + current, 0),
+      Math.round(
+        [
+          this.strength.toNumber() * this.calculateModifier(0, 0.2),
+          this.dexterity.toNumber() * this.calculateModifier(0, 0.2),
+          this.strength.toNumber() * this.calculateModifier(0, 1.2),
+        ].reduce((prev, current) => prev + current, 0),
+      ),
     );
   }
 }

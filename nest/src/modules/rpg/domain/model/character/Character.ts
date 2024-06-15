@@ -18,9 +18,11 @@ export abstract class Character extends AggregateRoot {
   name: CharacterName;
   job: CharacterJob;
   healthPoints: CharacterHealthPoints;
+  // @TODO maximum health points, current health points
   strength: CharacterStrength;
   dexterity: CharacterDexterity;
   intelligence: CharacterIntelligence;
+  // @TODO Battle modifiers
   isAlive: boolean;
   createdAt: CharacterCreatedAt;
 

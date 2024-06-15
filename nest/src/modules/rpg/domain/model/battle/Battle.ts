@@ -47,7 +47,7 @@ export class Battle extends AggregateRoot {
     return battle;
   }
 
-  end(battleLog: BaseEvent[]): void {
+  endBattle(battleLog: BaseEvent[]): void {
     this.recordThat(new BattleHasEnded(this.id, battleLog));
   }
 
@@ -75,7 +75,10 @@ export class Battle extends AggregateRoot {
   }
 
   protected whenBattleHasEnded(event: BattleHasEnded): void {
-    this.battleLog = event.battleLog;
+    this.battleLog = event.battleLog.map((event: BaseEvent) => ({
+      eventName: event.constructor.name,
+      ...event,
+    }));
     this.state = BattleState.Ended;
   }
 }

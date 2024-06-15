@@ -1,7 +1,9 @@
 import { Injectable } from '@nestjs/common';
+import { EventBus } from '@nestjs/cqrs';
 import { InjectModel } from '@nestjs/mongoose';
 import { Document, Model } from 'mongoose';
 import { Either, Maybe } from 'purify-ts';
+import { BaseMongooseRepository } from 'src/lib/common/infrastructure/domain/model/BaseMongooseRepository';
 import { CharacterFactory } from 'src/modules/rpg/domain/model/CharacterFactory';
 import { Character } from 'src/modules/rpg/domain/model/character/Character';
 import { Characters } from 'src/modules/rpg/domain/model/character/Characters';
@@ -10,8 +12,16 @@ import { CharacterId } from 'src/modules/rpg/domain/model/character/value-object
 import { CharacterJob } from 'src/modules/rpg/domain/model/character/value-objects/CharacterJob';
 
 @Injectable()
-export class MongooseCharacters implements Characters {
-  constructor(@InjectModel(Character.name) private model: Model<Character>) {}
+export class MongooseCharacters
+  extends BaseMongooseRepository
+  implements Characters
+{
+  constructor(
+    @InjectModel(Character.name) private model: Model<Character>,
+    eventBus: EventBus,
+  ) {
+    super(eventBus);
+  }
 
   async get(id: CharacterId): Promise<Either<Error, Character>> {
     return (await this.find(id)).toEither(
@@ -37,12 +47,16 @@ export class MongooseCharacters implements Characters {
     const createdCat = new this.model(character);
 
     await createdCat.save();
+
+    this.dispatchEvents(character);
   }
 
   async update(character: Character): Promise<void> {
     await this.model
       .findByIdAndUpdate(character.id.toString(), new this.model(character))
       .exec();
+
+    this.dispatchEvents(character);
   }
 
   private convertToDomainModel(

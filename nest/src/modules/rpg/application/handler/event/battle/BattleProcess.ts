@@ -1,6 +1,8 @@
-import { CommandBus } from '@nestjs/cqrs';
+import { Logger } from '@nestjs/common';
+import { CommandBus, EventsHandler, IEventHandler } from '@nestjs/cqrs';
 import { BaseEvent } from 'src/lib/common/domain/model/BaseEvent';
 import { EndBattleCommand } from 'src/modules/rpg/domain/model/battle/command/EndBattleCommand';
+import { BattleHasEnded } from 'src/modules/rpg/domain/model/battle/event/BattleHasEnded';
 import { BattleWasCreated } from 'src/modules/rpg/domain/model/battle/event/BattleWasCreated';
 import { BattleId } from 'src/modules/rpg/domain/model/battle/value-object/BattleId';
 import { AttackCharacterCommand } from 'src/modules/rpg/domain/model/character/command/AttackCharacterCommand';
@@ -28,18 +30,57 @@ import { CharacterSpeed } from 'src/modules/rpg/domain/model/character/value-obj
  * The process and the process manager ensures that there can be only one ongoing battle at any given time
  * that includes associated characters, and it also guarantees the execution order of all adjacent event handlers.
  */
-export class BattleProcess {
-  attackerId: CharacterId;
-  attackerSpeed: CharacterSpeed = null;
-  defenderId: CharacterId;
-  defenderSpeed: CharacterSpeed = null;
-  battleId: BattleId;
-  battleLog: BaseEvent[] = [];
+@EventsHandler(
+  BattleWasCreated,
+  CharacterPreparedForAttack,
+  CharacterWasAttacked,
+  BattleHasEnded,
+)
+export class BattleProcess implements IEventHandler<BaseEvent> {
+  private attackerId: CharacterId;
+  private attackerSpeed: CharacterSpeed = null;
+  private defenderId: CharacterId;
+  private defenderSpeed: CharacterSpeed = null;
+  private battleId: BattleId;
+  private battleLog: BaseEvent[] = []; // @TODO write every event into the Battle aggregate and persist it after each one
+  private battleHasEnded: boolean = false;
+  private readonly logger: Logger;
 
-  constructor(private readonly commandBus: CommandBus) {}
+  constructor(private readonly commandBus: CommandBus) {
+    this.logger = new Logger(BattleProcess.name);
+  }
+
+  handle(event: BaseEvent) {
+    this.logger.debug(
+      `Handling domain event "${event.constructor.name}": ${JSON.stringify(event)}`,
+    );
+
+    switch (true) {
+      case event instanceof BattleWasCreated:
+        this.onBattleWasCreated(event);
+        break;
+      case event instanceof CharacterPreparedForAttack:
+        this.onCharacterPreparedForAttack(event);
+        break;
+      case event instanceof CharacterWasAttacked:
+        this.onCharacterWasAttacked(event);
+        break;
+      case event instanceof BattleHasEnded:
+        this.onBattleHasEnded(event);
+        break;
+      default:
+        throw new Error(
+          `Cannot find handler for event "${event.constructor.name}"`,
+        );
+    }
+
+    this.logger.debug(
+      `Successfully handled domain event "${event.constructor.name}": ${JSON.stringify(event)}`,
+    );
+  }
 
   // in the real world scenario, we would start the process here
-  onBattleWasCreated(event: BattleWasCreated): void {
+  private onBattleWasCreated(event: BattleWasCreated): void {
     this.battleLog.push(event);
 
     this.attackerId = event.attackerId;
@@ -54,14 +95,16 @@ export class BattleProcess {
     );
   }
 
-  onCharacterPreparedForAttack(event: CharacterPreparedForAttack): void {
+  private async onCharacterPreparedForAttack(
+    event: CharacterPreparedForAttack,
+  ): Promise<void> {
     this.battleLog.push(event);
 
-    if (event.characterId === this.attackerId) {
+    if (event.characterId.equals(this.attackerId)) {
       this.attackerSpeed = event.characterSpeed;
     }
 
-    if (event.characterId === this.defenderId) {
+    if (event.characterId.equals(this.defenderId)) {
       this.defenderSpeed = event.characterSpeed;
     }
 
@@ -70,19 +113,37 @@ export class BattleProcess {
       return;
     }
 
-    this.commandBus.execute(
-      this.attackerSpeed.compare(this.defenderSpeed) === 1
-        ? new AttackCharacterCommand(this.attackerId, this.defenderId)
-        : new AttackCharacterCommand(this.defenderId, this.attackerId),
-    );
+    const attackersAttack = () =>
+      new AttackCharacterCommand(this.attackerId, this.defenderId);
+    const defendersAttack = () =>
+      new AttackCharacterCommand(this.defenderId, this.attackerId);
+
+    if (this.attackerSpeed.compare(this.defenderSpeed) === 1) {
+      await this.commandBus.execute(attackersAttack());
+      if (!this.battleHasEnded) {
+        await this.commandBus.execute(defendersAttack());
+      }
+
+      return;
+    }
+
+    await this.commandBus.execute(attackersAttack());
+    if (!this.battleHasEnded) {
+      await this.commandBus.execute(defendersAttack());
+    }
   }
 
-  onCharacterWasAttacked(event: CharacterWasAttacked): void {
+  private onCharacterWasAttacked(event: CharacterWasAttacked): void {
     this.battleLog.push(event);
 
     // reset both characters speed so they are able to prepare for the next attack
-    this.attackerSpeed = null;
-    this.defenderSpeed = null;
+    if (event.attackerId.equals(this.attackerId)) {
+      this.attackerSpeed = null;
+    }
+
+    if (event.attackerId.equals(this.defenderId)) {
+      this.defenderSpeed = null;
+    }
 
     if (
       event.defenderHealthPoints.compare(new CharacterHealthPoints(0)) === 0
@@ -96,6 +157,11 @@ export class BattleProcess {
       return;
     }
 
+    if (this.attackerSpeed !== null || this.defenderSpeed !== null) {
+      // characters are still attacking
+      return;
+    }
+
     // proceed to next round of peparation and attack
     this.commandBus.execute(
       new PrepareCharacterForAttackCommand(this.attackerId),
@@ -103,5 +169,10 @@ export class BattleProcess {
     this.commandBus.execute(
       new PrepareCharacterForAttackCommand(this.defenderId),
     );
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  private onBattleHasEnded(event: BattleHasEnded): void {
+    this.battleHasEnded = true;
   }
 }

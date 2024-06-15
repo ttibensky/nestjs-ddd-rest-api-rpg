@@ -1,6 +1,6 @@
 import { BaseEvent } from 'src/lib/common/domain/model/BaseEvent';
 
-export type CharacterView = {
+export type BattleView = {
   id: string;
   attackerId: string;
   attackerName: string;

@@ -1,6 +1,6 @@
 # Neo RPG
 
-This repository is a ressult of [takehome assignment](./neo-financial-instructions.pdf) for a role at Neo Financial.
+This repository is a result of [takehome assignment](./neo-financial-instructions.pdf) for a role at Neo Financial.
 It utilizes:
 
 - languages:

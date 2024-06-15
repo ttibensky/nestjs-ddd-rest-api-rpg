@@ -1,10 +1,10 @@
-import { Character } from './character/Character';
-import { Mage } from './character/Mage';
-import { Thief } from './character/Thief';
-import { Warrior } from './character/Warrior';
-import { CharacterId } from './character/value-objects/CharacterId';
-import { CharacterJob } from './character/value-objects/CharacterJob';
-import { CharacterName } from './character/value-objects/CharacterName';
+import { Character } from './Character';
+import { Mage } from './Mage';
+import { Thief } from './Thief';
+import { Warrior } from './Warrior';
+import { CharacterId } from './value-objects/CharacterId';
+import { CharacterJob } from './value-objects/CharacterJob';
+import { CharacterName } from './value-objects/CharacterName';
 
 export class CharacterFactory {
   static create(

@@ -1,6 +1,6 @@
 import { Inject } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { CharacterFactory } from 'src/modules/rpg/domain/model/CharacterFactory';
+import { CharacterFactory } from 'src/modules/rpg/domain/model/character/CharacterFactory';
 import { Characters } from 'src/modules/rpg/domain/model/character/Characters';
 import { CreateCharacterCommand } from 'src/modules/rpg/domain/model/character/command/CreateCharacterCommand';
 

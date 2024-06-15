@@ -1,12 +1,12 @@
-import { IsNotEmpty } from 'class-validator';
+import { IsEnum, IsNotEmpty, Matches } from 'class-validator';
+import { CharacterJob } from 'src/modules/rpg/domain/model/character/value-objects/CharacterJob';
 
 export class CreateCharacterDTO {
-  // @TODO name must contain letters or _ (underscore) characters and have a length between 4 and 15 characters inclusive
   @IsNotEmpty()
+  @Matches(/^[a-zA-Z_]{4,15}$/)
   readonly name: string;
 
-  // @TODO validate the string is valid enum value
-  // @TODO job must be one of Warrior Thief or Mage
   @IsNotEmpty()
+  @IsEnum(CharacterJob)
   readonly job: string;
 }

@@ -8,7 +8,13 @@ import {
   Post,
 } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
-import { ApiBody, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBody,
+  ApiExtraModels,
+  ApiResponse,
+  ApiTags,
+  getSchemaPath,
+} from '@nestjs/swagger';
 import { validateOrReject } from 'class-validator';
 import { CreateBattleCommand } from 'src/modules/rpg/domain/model/battle/command/CreateBattleCommand';
 import { CharacterId } from 'src/modules/rpg/domain/model/character/value-objects/CharacterId';
@@ -18,8 +24,19 @@ import { BattleId } from 'src/modules/rpg/domain/model/battle/value-object/Battl
 import { FindBattleQuery } from 'src/modules/rpg/domain/model/battle/query/FindBattleQuery';
 import { BattleView } from './view/BattleView';
 import { Maybe } from 'purify-ts';
+import { BattleWasCreated } from 'src/modules/rpg/domain/model/battle/event/BattleWasCreated';
+import { BattleHasEnded } from 'src/modules/rpg/domain/model/battle/event/BattleHasEnded';
+import { CharacterPreparedForAttack } from 'src/modules/rpg/domain/model/character/event/CharacterPreparedForAttack';
+import { CharacterWasAttacked } from 'src/modules/rpg/domain/model/character/event/CharacterWasAttacked';
 
 @ApiTags('battle')
+@ApiExtraModels(
+  BattleView,
+  BattleWasCreated,
+  CharacterPreparedForAttack,
+  CharacterWasAttacked,
+  BattleHasEnded,
+)
 @Controller('battle')
 export class BattleController {
   constructor(
@@ -27,7 +44,6 @@ export class BattleController {
     private readonly queryBus: QueryBus,
   ) {}
 
-  // @TODO document response body
   @ApiBody({
     schema: {
       type: 'object',
@@ -41,6 +57,12 @@ export class BattleController {
           example: 'ba8a892b-9f21-406f-879a-00b54d0e98ae',
         },
       },
+    },
+  })
+  @ApiResponse({
+    status: 200,
+    schema: {
+      $ref: getSchemaPath(BattleView),
     },
   })
   @Post()
@@ -63,7 +85,21 @@ export class BattleController {
       .then(() => this.findBattle(battleId));
   }
 
-  // @TODO document response body
+  @ApiResponse({
+    status: 200,
+    schema: {
+      $ref: getSchemaPath(BattleView),
+    },
+  })
+  @ApiResponse({
+    status: 404,
+    schema: {
+      example: {
+        message: 'Not Found',
+        statusCode: 404,
+      },
+    },
+  })
   @Get(':id')
   find(@Param('id') id: string): Promise<BattleView> {
     return this.findBattle(BattleId.fromString(id));

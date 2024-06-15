@@ -23,6 +23,10 @@ This repository is a takehome assignment for a role at Neo Financial.
 - Swagger API documentation [http://localhost:3001/api](http://localhost:3001/api)
 - Mongo Express [http://localhost:8081](http://localhost:8081)
 
+## TODO
+
+- use custom errors instead of the build-in Error
+
 ## Resources
 
 - [https://www.domainlanguage.com/ddd/blue-book/](https://www.domainlanguage.com/ddd/blue-book/)

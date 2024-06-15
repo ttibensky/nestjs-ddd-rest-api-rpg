@@ -42,7 +42,7 @@ export class BattleProcess implements IEventHandler<BaseEvent> {
   private defenderId: CharacterId;
   private defenderSpeed: CharacterSpeed = null;
   private battleId: BattleId;
-  private battleLog: BaseEvent[] = []; // @TODO write every event into the Battle aggregate and persist it after each one
+  private battleLog: BaseEvent[] = []; // @TODO push every event into the Battle aggregate and persist it one-by-one
   private battleHasEnded: boolean = false;
   private readonly logger: Logger;
 

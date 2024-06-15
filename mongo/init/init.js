@@ -6,7 +6,7 @@ db.createCollection('characters', { capped: false });
 db.characters.insert([
     {
         _id: '7699057a-c525-45fc-b4ec-6d457925b15a',
-        name: 'Jaina Proudmoore',
+        name: 'Jaina',
         job: 'mage',
         healthPoints: 12,
         strength: 4,

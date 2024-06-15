@@ -8,7 +8,13 @@ import {
   Post,
 } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
-import { ApiBody, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBody,
+  ApiExtraModels,
+  ApiResponse,
+  ApiTags,
+  getSchemaPath,
+} from '@nestjs/swagger';
 import { validateOrReject } from 'class-validator';
 import { Character } from 'src/modules/rpg/domain/model/character/Character';
 import { CreateCharacterCommand } from 'src/modules/rpg/domain/model/character/command/CreateCharacterCommand';
@@ -22,6 +28,7 @@ import { Maybe } from 'purify-ts';
 import { SearchCharactersQuery } from 'src/modules/rpg/domain/model/character/query/SearchCharactersQuery';
 
 @ApiTags('character')
+@ApiExtraModels(CharacterView)
 @Controller('character')
 export class CharacterController {
   constructor(
@@ -29,14 +36,13 @@ export class CharacterController {
     private readonly queryBus: QueryBus,
   ) {}
 
-  // @TODO document response body
   @ApiBody({
     schema: {
       type: 'object',
       properties: {
         name: {
           type: 'string',
-          example: 'Jaina Proudmoore',
+          example: 'Jaina',
         },
         job: {
           type: 'string',
@@ -44,6 +50,12 @@ export class CharacterController {
           enum: Object.values(CharacterJob),
         },
       },
+    },
+  })
+  @ApiResponse({
+    status: 200,
+    schema: {
+      $ref: getSchemaPath(CharacterView),
     },
   })
   @Post()
@@ -66,7 +78,15 @@ export class CharacterController {
       .then(() => this.findCharacter(characterId));
   }
 
-  // @TODO document response body
+  @ApiResponse({
+    status: 200,
+    schema: {
+      type: 'array',
+      items: {
+        $ref: getSchemaPath(CharacterView),
+      },
+    },
+  })
   @Get()
   async findAll(): Promise<CharacterView[]> {
     return this.queryBus
@@ -76,7 +96,21 @@ export class CharacterController {
       );
   }
 
-  // @TODO document response body
+  @ApiResponse({
+    status: 200,
+    schema: {
+      $ref: getSchemaPath(CharacterView),
+    },
+  })
+  @ApiResponse({
+    status: 404,
+    schema: {
+      example: {
+        message: 'Not Found',
+        statusCode: 404,
+      },
+    },
+  })
   @Get(':id')
   async find(@Param('id') id: string): Promise<CharacterView> {
     return this.findCharacter(CharacterId.fromString(id));
@@ -99,16 +133,16 @@ export class CharacterController {
   }
 
   private convertToView(character: Character): CharacterView {
-    return {
-      id: character.id.toString(),
-      name: character.name.toString(),
-      job: character.job.toString(),
-      healthPoints: character.healthPoints.toNumber(),
-      strength: character.strength.toNumber(),
-      dexterity: character.dexterity.toNumber(),
-      intelligence: character.intelligence.toNumber(),
-      isAlive: character.isAlive,
-      createdAt: character.createdAt.toString(),
-    };
+    return new CharacterView(
+      character.id.toString(),
+      character.name.toString(),
+      character.job.toString(),
+      character.healthPoints.toNumber(),
+      character.strength.toNumber(),
+      character.dexterity.toNumber(),
+      character.intelligence.toNumber(),
+      character.isAlive,
+      character.createdAt.toString(),
+    );
   }
 }

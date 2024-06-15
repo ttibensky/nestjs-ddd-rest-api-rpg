@@ -34,11 +34,11 @@ export class BattleController {
       properties: {
         attackerId: {
           type: 'string',
-          example: 'cfdaf776-6600-47a2-993b-9621f3aa6843',
+          example: '7699057a-c525-45fc-b4ec-6d457925b15a',
         },
         defenderId: {
           type: 'string',
-          example: '2119c00f-070c-459d-8161-94bc4fde6b4f',
+          example: 'ba8a892b-9f21-406f-879a-00b54d0e98ae',
         },
       },
     },

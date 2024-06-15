@@ -34,8 +34,8 @@ export class Warrior extends Character {
         [
           this.dexterity.toNumber() * this.calculateModifier(0, 0.6),
           this.intelligence.toNumber() * this.calculateModifier(0, 0.2),
-        ].reduce((prev, current) => prev + current, 0),
-      ),
+        ].reduce((prev, current) => prev + current, 0) * 100,
+      ) / 100,
     );
   }
 

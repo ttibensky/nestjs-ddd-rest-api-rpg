@@ -34,8 +34,8 @@ export class Thief extends Character {
         [this.dexterity.toNumber() * this.calculateModifier(0, 0.8)].reduce(
           (prev, current) => prev + current,
           0,
-        ),
-      ),
+        ) * 100,
+      ) / 100,
     );
   }
 

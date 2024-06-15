@@ -80,17 +80,22 @@ export class BattleProcess implements IEventHandler<BaseEvent> {
   }
 
   // in the real world scenario, we would start the process here
-  private onBattleWasCreated(event: BattleWasCreated): void {
+  private async onBattleWasCreated(event: BattleWasCreated): Promise<void> {
+    // at the moment, the app only support one battle running at a time
+    // to make it support multiple parallel battles, this process needs to become an entity
+    // and also the process manager needs to be implemented
+    this.resetBattle();
+
     this.battleLog.push(event);
 
     this.attackerId = event.attackerId;
     this.defenderId = event.defenderId;
     this.battleId = event.battleId;
 
-    this.commandBus.execute(
+    await this.commandBus.execute(
       new PrepareCharacterForAttackCommand(this.attackerId),
     );
-    this.commandBus.execute(
+    await this.commandBus.execute(
       new PrepareCharacterForAttackCommand(this.defenderId),
     );
   }
@@ -113,27 +118,33 @@ export class BattleProcess implements IEventHandler<BaseEvent> {
       return;
     }
 
-    const attackersAttack = () =>
-      new AttackCharacterCommand(this.attackerId, this.defenderId);
-    const defendersAttack = () =>
-      new AttackCharacterCommand(this.defenderId, this.attackerId);
+    const attackersAttack = new AttackCharacterCommand(
+      this.defenderId,
+      this.attackerId,
+    );
+    const defendersAttack = new AttackCharacterCommand(
+      this.attackerId,
+      this.defenderId,
+    );
 
-    if (this.attackerSpeed.compare(this.defenderSpeed) === 1) {
-      await this.commandBus.execute(attackersAttack());
+    if ([0, 1].includes(this.attackerSpeed.compare(this.defenderSpeed))) {
+      await this.commandBus.execute(attackersAttack);
       if (!this.battleHasEnded) {
-        await this.commandBus.execute(defendersAttack());
+        await this.commandBus.execute(defendersAttack);
       }
 
       return;
     }
 
-    await this.commandBus.execute(attackersAttack());
+    await this.commandBus.execute(defendersAttack);
     if (!this.battleHasEnded) {
-      await this.commandBus.execute(defendersAttack());
+      await this.commandBus.execute(attackersAttack);
     }
   }
 
-  private onCharacterWasAttacked(event: CharacterWasAttacked): void {
+  private async onCharacterWasAttacked(
+    event: CharacterWasAttacked,
+  ): Promise<void> {
     this.battleLog.push(event);
 
     // reset both characters speed so they are able to prepare for the next attack
@@ -149,7 +160,7 @@ export class BattleProcess implements IEventHandler<BaseEvent> {
       event.defenderHealthPoints.compare(new CharacterHealthPoints(0)) === 0
     ) {
       // battle has ended, one of the characters died
-      this.commandBus.execute(
+      await this.commandBus.execute(
         new EndBattleCommand(this.battleId, this.battleLog),
       );
 
@@ -157,16 +168,16 @@ export class BattleProcess implements IEventHandler<BaseEvent> {
       return;
     }
 
-    if (this.attackerSpeed !== null || this.defenderSpeed !== null) {
+    if (!(this.attackerSpeed === null && this.defenderSpeed === null)) {
       // characters are still attacking
       return;
     }
 
     // proceed to next round of peparation and attack
-    this.commandBus.execute(
+    await this.commandBus.execute(
       new PrepareCharacterForAttackCommand(this.attackerId),
     );
-    this.commandBus.execute(
+    await this.commandBus.execute(
       new PrepareCharacterForAttackCommand(this.defenderId),
     );
   }
@@ -174,5 +185,12 @@ export class BattleProcess implements IEventHandler<BaseEvent> {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   private onBattleHasEnded(event: BattleHasEnded): void {
     this.battleHasEnded = true;
+  }
+
+  private resetBattle(): void {
+    this.attackerSpeed = null;
+    this.defenderSpeed = null;
+    this.battleLog = [];
+    this.battleHasEnded = false;
   }
 }

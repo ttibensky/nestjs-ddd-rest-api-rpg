@@ -47,7 +47,8 @@ export abstract class Character extends AggregateRoot {
 
   prepareForAttack(): void {
     if (!this.isAlive) {
-      throw new Error(`Character ${this.id} is dead`);
+      // what is dead, cannot attack
+      return;
     }
 
     this.recordThat(

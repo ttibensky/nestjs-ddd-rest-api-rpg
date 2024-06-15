@@ -34,8 +34,8 @@ export class Mage extends Character {
         [
           this.dexterity.toNumber() * this.calculateModifier(0, 0.4),
           this.strength.toNumber() * this.calculateModifier(0, 0.1),
-        ].reduce((prev, current) => prev + current, 0),
-      ),
+        ].reduce((prev, current) => prev + current, 0) * 100,
+      ) / 100,
     );
   }
 

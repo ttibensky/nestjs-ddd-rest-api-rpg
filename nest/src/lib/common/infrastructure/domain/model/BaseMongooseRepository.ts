@@ -12,6 +12,10 @@ export abstract class BaseMongooseRepository {
   protected dispatchEvents(aggregate: AggregateRoot): void {
     const generator = aggregate.shiftEvents();
     for (const event of generator) {
+      if (event === undefined) {
+        return;
+      }
+
       this.logger.debug(
         `Publishing domain event "${event.constructor.name}": ${JSON.stringify(event)}`,
       );

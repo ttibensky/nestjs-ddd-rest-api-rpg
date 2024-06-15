@@ -41,7 +41,7 @@ It utilizes:
 ## Usage
 
 - run `task down up logs` to restart the project and start tailing logs from all containers
-- run `task down && sudo rm -rf mongo/data && task up` to restart the database and the project
+- run `task down && sudo rm -rf mongo/data && task up` to re-seed database and start the project
 
 ### Endpoints & URLs
 

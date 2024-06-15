@@ -26,6 +26,7 @@ export abstract class Character extends AggregateRoot {
   baseIntelligence: CharacterIntelligence;
   damageModifier: CharacterDamageModifier;
   speedModifier: CharacterSpeedModifier;
+  // @TODO add additional stats: additionalStrength, additionalDexterity, additionalIntelligence
   isAlive: boolean;
   createdAt: CharacterCreatedAt;
 

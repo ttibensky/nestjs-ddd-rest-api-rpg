@@ -1,6 +1,6 @@
 # Neo RPG
 
-This repository is a takehome assignment for a role at Neo Financial.
+This repository is a ressult of [takehome assignment](./neo-financial-instructions.pdf) for a role at Neo Financial.
 It utilizes:
 
 - languages:
@@ -50,15 +50,34 @@ It utilizes:
 
 ## TODO
 
-The following things would be must-haves or nice-to-haves in a real world project:
+### Based on the instructions
+
+- add job list endpoint
+  - data for character cration screen
+- add validation errors to Swagger
+- add tests
+
+#### Nite-to-haves
+
+- add video/gif of using the Swagger and Mongo Express
+- fix cyclic serialization issue of `BattleHasEnded`
+  - it would be good to have this event present in the battle log, although the data in that event are not required by frontend (everything FE needs is in the previous events)
+- A character should be designed with some future features in mind, which don't need to be implemented at this point in the project:
+  - A character will be able to level up, at which point their core attributes will change (health, strength, dexterity, and intelligence)
+  - A character will be able to change their job, resulting in calculations involving their modifiers to reflect their new job (attack modifier and speed modifier)
+
+### Must-haves in a real-world project
 
 - use custom errors instead of the build-in `Error` class
 - error handling (e.g. mongoose connection failures, more validations)
 - asynchronous command and event processing (we are already using command bus and event bus)
 - correlation and causation ids for requests, commands, queries, events and arbitrary log message contexts
+
+### Nice-to-haves
+
 - event sourcing (aggregates are already prepared for it)
 - graphql (as an alterantive to REST API)
-- websockets (for auto-updates after creating/updating/deleting a job)
+- websockets (for auto-updates after creating/updating/deleting a battle)
 
 ## Resources
 

@@ -72,10 +72,13 @@ export class MongooseCharacters
     character.id = CharacterId.fromString(raw.id);
     character.name = raw.name;
     character.job = characterJob;
-    character.healthPoints = raw.healthPoints;
-    character.strength = raw.strength;
-    character.dexterity = raw.dexterity;
-    character.intelligence = raw.intelligence;
+    character.maximumHealthPoints = raw.maximumHealthPoints;
+    character.currentHealthPoints = raw.currentHealthPoints;
+    character.baseStrength = raw.baseStrength;
+    character.baseDexterity = raw.baseDexterity;
+    character.baseIntelligence = raw.baseIntelligence;
+    character.damageModifier = raw.damageModifier;
+    character.speedModifier = raw.speedModifier;
     character.isAlive = raw.isAlive;
     character.createdAt = raw.createdAt;
 

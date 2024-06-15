@@ -12,33 +12,22 @@ import { CharacterJob } from './value-objects/CharacterJob';
 import { CharacterName } from './value-objects/CharacterName';
 import { CharacterSpeed } from './value-objects/CharacterSpeed';
 import { CharacterStrength } from './value-objects/CharacterStrength';
+import { CharacterSpeedModifier } from './value-objects/CharacterSpeedModifier';
+import { CharacterDamageModifier } from './value-objects/CharacterDamageModifier';
 
 export abstract class Character extends AggregateRoot {
   id: CharacterId;
   name: CharacterName;
   job: CharacterJob;
-  healthPoints: CharacterHealthPoints;
-  // @TODO maximum health points, current health points
-  strength: CharacterStrength;
-  dexterity: CharacterDexterity;
-  intelligence: CharacterIntelligence;
-  // @TODO Battle modifiers
+  maximumHealthPoints: CharacterHealthPoints;
+  currentHealthPoints: CharacterHealthPoints;
+  baseStrength: CharacterStrength;
+  baseDexterity: CharacterDexterity;
+  baseIntelligence: CharacterIntelligence;
+  damageModifier: CharacterDamageModifier;
+  speedModifier: CharacterSpeedModifier;
   isAlive: boolean;
   createdAt: CharacterCreatedAt;
-
-  // @TODO once we have a projection for this aggregate root, we can set all properties visibility to private
-  // the constructor must be public for the ODM to be able to hydrate models when reading from the database
-  // constructor(
-  //   public id: CharacterId,
-  //   public name: CharacterName,
-  //   public job: CharacterJob,
-  //   public healthPoints: CharacterHealthPoints,
-  //   public strength: CharacterStrength,
-  //   public dexterity: CharacterDexterity,
-  //   public intelligence: CharacterIntelligence,
-  // ) {
-  //   super();
-  // }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   static create(id: CharacterId, name: CharacterName): Character {
@@ -63,10 +52,10 @@ export abstract class Character extends AggregateRoot {
       new CharacterWasAttacked(
         attacker.id,
         attacker.name,
-        attacker.healthPoints,
+        attacker.currentHealthPoints,
         this.id,
         this.name,
-        this.healthPoints.substract(damage),
+        this.currentHealthPoints.substract(damage),
         damage,
       ),
     );
@@ -101,17 +90,20 @@ export abstract class Character extends AggregateRoot {
     this.id = event.characterId;
     this.name = event.characterName;
     this.job = event.characterJob;
-    this.healthPoints = event.characterHealthPoints;
-    this.strength = event.characterStrength;
-    this.dexterity = event.characterDexterity;
-    this.intelligence = event.characterIntelligence;
+    this.maximumHealthPoints = event.characterHealthPoints;
+    this.currentHealthPoints = event.characterHealthPoints;
+    this.baseStrength = event.characterStrength;
+    this.baseDexterity = event.characterDexterity;
+    this.baseIntelligence = event.characterIntelligence;
+    this.damageModifier = event.damageModifier;
+    this.speedModifier = event.speedModifier;
     this.isAlive = true;
     this.createdAt = CharacterCreatedAt.fromString(event.createdAt.toString());
   }
 
   protected whenCharacterWasAttacked(event: CharacterWasAttacked): void {
-    this.healthPoints = this.healthPoints.substract(event.damage);
+    this.currentHealthPoints = this.currentHealthPoints.substract(event.damage);
     this.isAlive =
-      this.healthPoints.compare(new CharacterHealthPoints(0)) === 1;
+      this.currentHealthPoints.compare(new CharacterHealthPoints(0)) === 1;
   }
 }

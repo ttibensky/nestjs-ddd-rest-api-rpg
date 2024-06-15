@@ -6,6 +6,8 @@ import { CharacterJob } from '../value-objects/CharacterJob';
 import { CharacterStrength } from '../value-objects/CharacterStrength';
 import { CharacterIntelligence } from '../value-objects/CharacterIntelligence';
 import { CharacterDexterity } from '../value-objects/CharacterDexterity';
+import { CharacterDamageModifier } from '../value-objects/CharacterDamageModifier';
+import { CharacterSpeedModifier } from '../value-objects/CharacterSpeedModifier';
 
 export class CharacterWasCreated extends BaseEvent {
   constructor(
@@ -16,6 +18,8 @@ export class CharacterWasCreated extends BaseEvent {
     public characterStrength: CharacterStrength,
     public characterDexterity: CharacterDexterity,
     public characterIntelligence: CharacterIntelligence,
+    public damageModifier: CharacterDamageModifier,
+    public speedModifier: CharacterSpeedModifier,
   ) {
     super();
   }

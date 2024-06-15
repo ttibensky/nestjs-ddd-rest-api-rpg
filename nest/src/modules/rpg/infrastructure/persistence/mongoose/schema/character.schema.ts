@@ -15,16 +15,25 @@ export const CharacterSchema = new Schema({
   _id: String,
   name: { type: String, get: (v: string) => new CharacterName(v) },
   job: { type: String, enum: Object.values(CharacterJob) },
-  healthPoints: {
+  maximumHealthPoints: {
     type: Number,
     get: (v: number) => new CharacterHealthPoints(v),
   },
-  strength: { type: Number, get: (v: number) => new CharacterStrength(v) },
-  dexterity: { type: Number, get: (v: number) => new CharacterDexterity(v) },
-  intelligence: {
+  currentHealthPoints: {
+    type: Number,
+    get: (v: number) => new CharacterHealthPoints(v),
+  },
+  baseStrength: { type: Number, get: (v: number) => new CharacterStrength(v) },
+  baseDexterity: {
+    type: Number,
+    get: (v: number) => new CharacterDexterity(v),
+  },
+  baseIntelligence: {
     type: Number,
     get: (v: number) => new CharacterIntelligence(v),
   },
+  damageModifier: { type: String },
+  speedModifier: { type: String },
   isAlive: { type: Boolean },
   createdAt: { type: Date, get: (v: Date) => new CharacterCreatedAt(v) },
 });

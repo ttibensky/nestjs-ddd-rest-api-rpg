@@ -20,13 +20,6 @@ export class Battle extends AggregateRoot {
   createdAt: BattleCreatedAt;
   battleLog: BaseEvent[];
 
-  // constructor(
-  //   public attackerId: CharacterId,
-  //   public defenderId: CharacterId,
-  // ) {
-  //   super();
-  // }
-
   static create(
     id: BattleId,
     attacker: Character,

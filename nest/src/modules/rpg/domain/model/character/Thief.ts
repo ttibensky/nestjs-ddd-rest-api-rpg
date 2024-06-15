@@ -1,5 +1,6 @@
 import { Character } from './Character';
 import { CharacterWasCreated } from './event/CharacterWasCreated';
+import { CharacterDamageModifier } from './value-objects/CharacterDamageModifier';
 import { CharacterDexterity } from './value-objects/CharacterDexterity';
 import { CharacterHealthPoints } from './value-objects/CharacterHealthPoints';
 import { CharacterId } from './value-objects/CharacterId';
@@ -7,7 +8,13 @@ import { CharacterIntelligence } from './value-objects/CharacterIntelligence';
 import { CharacterJob } from './value-objects/CharacterJob';
 import { CharacterName } from './value-objects/CharacterName';
 import { CharacterSpeed } from './value-objects/CharacterSpeed';
+import { CharacterSpeedModifier } from './value-objects/CharacterSpeedModifier';
 import { CharacterStrength } from './value-objects/CharacterStrength';
+
+const THIEF_DAMAGE_STRENGTH_MODIFIER = 0.25;
+const THIEF_DAMAGE_DEXTERITY_MODIFIER = 1;
+const THIEF_DAMAGE_INTELLIGENCE_MODIFIER = 0.25;
+const THIEF_SPEED_DEXTERITY_MODIFIER = 0.8;
 
 export class Thief extends Character {
   static create(id: CharacterId, name: CharacterName): Thief {
@@ -22,6 +29,16 @@ export class Thief extends Character {
         new CharacterStrength(4),
         new CharacterDexterity(10),
         new CharacterIntelligence(4),
+        new CharacterDamageModifier(
+          [
+            `${THIEF_DAMAGE_STRENGTH_MODIFIER * 100}% of strength`,
+            `${THIEF_DAMAGE_DEXTERITY_MODIFIER * 100}% of dexterity`,
+            `${THIEF_DAMAGE_INTELLIGENCE_MODIFIER * 100}% of intelligence`,
+          ].join(', '),
+        ),
+        new CharacterSpeedModifier(
+          [`${THIEF_SPEED_DEXTERITY_MODIFIER * 100}% of dexterity`].join(', '),
+        ),
       ),
     );
 
@@ -31,10 +48,10 @@ export class Thief extends Character {
   protected calculateSpeed(): CharacterSpeed {
     return new CharacterSpeed(
       Math.round(
-        [this.dexterity.toNumber() * this.calculateModifier(0, 0.8)].reduce(
-          (prev, current) => prev + current,
-          0,
-        ) * 100,
+        [
+          this.baseDexterity.toNumber() *
+            this.calculateModifier(0, THIEF_SPEED_DEXTERITY_MODIFIER),
+        ].reduce((prev, current) => prev + current, 0) * 100,
       ) / 100,
     );
   }
@@ -45,9 +62,12 @@ export class Thief extends Character {
     return new CharacterHealthPoints(
       Math.round(
         [
-          this.strength.toNumber() * this.calculateModifier(0, 0.25),
-          this.dexterity.toNumber() * this.calculateModifier(0, 1),
-          this.dexterity.toNumber() * this.calculateModifier(0, 0.25),
+          this.baseStrength.toNumber() *
+            this.calculateModifier(0, THIEF_DAMAGE_STRENGTH_MODIFIER),
+          this.baseDexterity.toNumber() *
+            this.calculateModifier(0, THIEF_DAMAGE_DEXTERITY_MODIFIER),
+          this.baseIntelligence.toNumber() *
+            this.calculateModifier(0, THIEF_DAMAGE_INTELLIGENCE_MODIFIER),
         ].reduce((prev, current) => prev + current, 0),
       ),
     );

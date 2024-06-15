@@ -1,33 +1,16 @@
 export class CharacterView {
-  id: string;
-  name: string;
-  job: string;
-  healthPoints: number;
-  strength: number;
-  dexterity: number;
-  intelligence: number;
-  isAlive: boolean;
-  createdAt: string;
-
   constructor(
-    id: string,
-    name: string,
-    job: string,
-    healthPoints: number,
-    strength: number,
-    dexterity: number,
-    intelligence: number,
-    isAlive: boolean,
-    createdAt: string,
-  ) {
-    this.id = id;
-    this.name = name;
-    this.job = job;
-    this.healthPoints = healthPoints;
-    this.strength = strength;
-    this.dexterity = dexterity;
-    this.intelligence = intelligence;
-    this.isAlive = isAlive;
-    this.createdAt = createdAt;
-  }
+    public id: string,
+    public name: string,
+    public job: string,
+    public maximumHealthPoints: number,
+    public currentHealthPoints: number,
+    public baseStrength: number,
+    public baseDexterity: number,
+    public baseIntelligence: number,
+    public damageModifier: string,
+    public speedModifier: string,
+    public isAlive: boolean,
+    public createdAt: string,
+  ) {}
 }

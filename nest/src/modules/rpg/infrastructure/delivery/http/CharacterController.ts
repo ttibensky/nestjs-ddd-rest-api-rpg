@@ -11,6 +11,7 @@ import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import {
   ApiBody,
   ApiExtraModels,
+  ApiParam,
   ApiResponse,
   ApiTags,
   getSchemaPath,
@@ -96,6 +97,11 @@ export class CharacterController {
       );
   }
 
+  @ApiParam({
+    name: 'id',
+    type: 'string',
+    example: '7431f870-1b32-4acd-9aa9-17edce6570e2',
+  })
   @ApiResponse({
     status: 200,
     schema: {
@@ -137,10 +143,13 @@ export class CharacterController {
       character.id.toString(),
       character.name.toString(),
       character.job.toString(),
-      character.healthPoints.toNumber(),
-      character.strength.toNumber(),
-      character.dexterity.toNumber(),
-      character.intelligence.toNumber(),
+      character.maximumHealthPoints.toNumber(),
+      character.currentHealthPoints.toNumber(),
+      character.baseStrength.toNumber(),
+      character.baseDexterity.toNumber(),
+      character.baseIntelligence.toNumber(),
+      character.damageModifier.toString(),
+      character.speedModifier.toString(),
       character.isAlive,
       character.createdAt.toString(),
     );

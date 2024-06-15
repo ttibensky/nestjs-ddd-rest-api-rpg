@@ -11,6 +11,7 @@ import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import {
   ApiBody,
   ApiExtraModels,
+  ApiParam,
   ApiResponse,
   ApiTags,
   getSchemaPath,
@@ -50,11 +51,11 @@ export class BattleController {
       properties: {
         attackerId: {
           type: 'string',
-          example: '7699057a-c525-45fc-b4ec-6d457925b15a',
+          example: '7431f870-1b32-4acd-9aa9-17edce6570e2',
         },
         defenderId: {
           type: 'string',
-          example: 'ba8a892b-9f21-406f-879a-00b54d0e98ae',
+          example: '492e0894-4b8d-46c7-888c-bd3535e5fbc3',
         },
       },
     },
@@ -85,6 +86,11 @@ export class BattleController {
       .then(() => this.findBattle(battleId));
   }
 
+  @ApiParam({
+    name: 'id',
+    type: 'string',
+    example: '86d1bb24-e9fa-499e-a7c0-881138038e35',
+  })
   @ApiResponse({
     status: 200,
     schema: {

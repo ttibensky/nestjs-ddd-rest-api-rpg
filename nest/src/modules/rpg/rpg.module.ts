@@ -17,6 +17,7 @@ import { MongooseBattles } from './infrastructure/domain/model/battle/MongooseBa
 import { MongooseCharacters } from './infrastructure/domain/model/character/MongooseCharacters';
 import { BattleSchema } from './infrastructure/persistence/mongoose/schema/battle.schema';
 import { CharacterSchema } from './infrastructure/persistence/mongoose/schema/character.schema';
+import { SearchCharactersQueryHandler } from './application/handler/query/character/SearchCharactersQueryHandler';
 
 @Module({
   imports: [
@@ -35,7 +36,11 @@ import { CharacterSchema } from './infrastructure/persistence/mongoose/schema/ch
       EndBattleCommandHandler,
     ],
     // query handlers
-    ...[FindCharacterQueryHandler, FindBattleQueryHandler],
+    ...[
+      SearchCharactersQueryHandler,
+      FindCharacterQueryHandler,
+      FindBattleQueryHandler,
+    ],
     // event handlers and processes
     ...[BattleProcess],
     ...[

@@ -13,13 +13,13 @@ import { validateOrReject } from 'class-validator';
 import { Character } from 'src/modules/rpg/domain/model/character/Character';
 import { CreateCharacterCommand } from 'src/modules/rpg/domain/model/character/command/CreateCharacterCommand';
 import { FindCharacterQuery } from 'src/modules/rpg/domain/model/character/query/FindCharacterQuery';
-import { SearchCharacterQuery } from 'src/modules/rpg/domain/model/character/query/SearchCharacterQuery';
 import { CharacterId } from 'src/modules/rpg/domain/model/character/value-objects/CharacterId';
 import { CharacterJob } from 'src/modules/rpg/domain/model/character/value-objects/CharacterJob';
 import { CharacterName } from 'src/modules/rpg/domain/model/character/value-objects/CharacterName';
 import { CreateCharacterDTO } from './dto/CreateCharacterDTO';
 import { CharacterView } from './view/CharacterView';
 import { Maybe } from 'purify-ts';
+import { SearchCharactersQuery } from 'src/modules/rpg/domain/model/character/query/SearchCharactersQuery';
 
 @ApiTags('character')
 @Controller('character')
@@ -29,6 +29,7 @@ export class CharacterController {
     private readonly queryBus: QueryBus,
   ) {}
 
+  // @TODO document response body
   @ApiBody({
     schema: {
       type: 'object',
@@ -65,11 +66,17 @@ export class CharacterController {
       .then(() => this.findCharacter(characterId));
   }
 
+  // @TODO document response body
   @Get()
-  async findAll(): Promise<Character[]> {
-    return this.queryBus.execute(new SearchCharacterQuery());
+  async findAll(): Promise<CharacterView[]> {
+    return this.queryBus
+      .execute(new SearchCharactersQuery())
+      .then((characters: Character[]) =>
+        characters.map((character: Character) => this.convertToView(character)),
+      );
   }
 
+  // @TODO document response body
   @Get(':id')
   async find(@Param('id') id: string): Promise<CharacterView> {
     return this.findCharacter(CharacterId.fromString(id));
@@ -82,21 +89,26 @@ export class CharacterController {
         // @TODO use serializer
         maybeCharacter
           .map(
-            (character: Character): CharacterView => ({
-              id: character.id.toString(),
-              name: character.name.toString(),
-              job: character.job.toString(),
-              healthPoints: character.healthPoints.toNumber(),
-              strength: character.strength.toNumber(),
-              dexterity: character.dexterity.toNumber(),
-              intelligence: character.intelligence.toNumber(),
-              isAlive: character.isAlive,
-              createdAt: character.createdAt.toString(),
-            }),
+            (character: Character): CharacterView =>
+              this.convertToView(character),
           )
           .orDefaultLazy(() => {
             throw new NotFoundException();
           }),
       );
+  }
+
+  private convertToView(character: Character): CharacterView {
+    return {
+      id: character.id.toString(),
+      name: character.name.toString(),
+      job: character.job.toString(),
+      healthPoints: character.healthPoints.toNumber(),
+      strength: character.strength.toNumber(),
+      dexterity: character.dexterity.toNumber(),
+      intelligence: character.intelligence.toNumber(),
+      isAlive: character.isAlive,
+      createdAt: character.createdAt.toString(),
+    };
   }
 }

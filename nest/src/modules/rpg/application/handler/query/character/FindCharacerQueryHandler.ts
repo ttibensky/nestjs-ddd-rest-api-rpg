@@ -11,7 +11,7 @@ export class FindCharacterQueryHandler
 {
   constructor(@Inject(Characters) private readonly characters: Characters) {}
 
-  execute(query: FindCharacterQuery): Promise<Maybe<Character>> {
-    return this.characters.find(query.characterId);
+  async execute(query: FindCharacterQuery): Promise<Maybe<Character>> {
+    return await this.characters.find(query.characterId);
   }
 }

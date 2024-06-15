@@ -17,6 +17,7 @@ export class BattleController {
     private readonly queryBus: QueryBus,
   ) {}
 
+  // @TODO document response body
   @ApiBody({
     schema: {
       type: 'object',
@@ -51,6 +52,7 @@ export class BattleController {
     return this.queryBus.execute(new FindBattleQuery(battleId));
   }
 
+  // @TODO document response body
   @Get(':id')
   find(@Param('id') id: string): Promise<Battle> {
     // @TODO map aggregate properties into a view model, do not use the aggregate as a view

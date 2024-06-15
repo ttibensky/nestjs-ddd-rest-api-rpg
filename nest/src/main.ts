@@ -5,13 +5,13 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
-    logger: ['error', 'warn', 'debug'], // @TODO move to .env
+    logger: JSON.parse(process.env.LOGGER_LEVELS),
   });
 
   // CORS
   app.enableCors({
     allowedHeaders: ['content-type'],
-    origin: 'http://localhost:3000', // @TODO move to .env
+    origin: process.env.CORS_ORIGIN,
     credentials: true,
   });
 

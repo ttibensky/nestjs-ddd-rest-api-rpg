@@ -52,24 +52,24 @@ db.characters.insert([
 db.createCollection('battles', { capped: false });
 db.battles.insert([
     {
-        _id: '86d1bb24-e9fa-499e-a7c0-881138038e35',
+        _id: '066c0485-5408-4902-b06f-85dcbf89dcd7',
         attackerId: '7431f870-1b32-4acd-9aa9-17edce6570e2',
         attackerName: 'Jaina',
-        defenderId: '492e0894-4b8d-46c7-888c-bd3535e5fbc3',
-        defenderName: 'Garona',
+        defenderId: '24ed098d-2adc-4b1f-99d1-6455a6e273d3',
+        defenderName: 'Cairne',
         state: 'ended',
-        createdAt: ISODate('2024-06-15T21:02:28.000Z'),
+        createdAt: ISODate('2024-06-16T15:08:43.000Z'),
         battleLog: [
             {
                 eventId: {
-                    uuid: '02c93654-93f9-4cc7-9afb-9ca0ee8f75e0'
+                    uuid: '02fafa2b-700f-4db9-be9d-e499bf0ba199'
                 },
                 createdAt: {
-                    date: ISODate('2024-06-15T21:02:28.547Z')
+                    date: ISODate('2024-06-16T15:08:43.407Z')
                 },
                 eventName: 'BattleWasCreated',
                 battleId: {
-                    uuid: '86d1bb24-e9fa-499e-a7c0-881138038e35'
+                    uuid: '066c0485-5408-4902-b06f-85dcbf89dcd7'
                 },
                 attackerId: {
                     uuid: '7431f870-1b32-4acd-9aa9-17edce6570e2'
@@ -78,18 +78,18 @@ db.battles.insert([
                     value: 'Jaina'
                 },
                 defenderId: {
-                    uuid: '492e0894-4b8d-46c7-888c-bd3535e5fbc3'
+                    uuid: '24ed098d-2adc-4b1f-99d1-6455a6e273d3'
                 },
                 defenderName: {
-                    value: 'Garona'
+                    value: 'Cairne'
                 }
             },
             {
                 eventId: {
-                    uuid: '6fc25a6c-7318-43e0-8717-849221bbc5f7'
+                    uuid: 'e8c6eb25-3787-416a-9593-f3bdf3e948ae'
                 },
                 createdAt: {
-                    date: ISODate('2024-06-15T21:02:28.559Z')
+                    date: ISODate('2024-06-16T15:08:43.424Z')
                 },
                 eventName: 'CharacterPreparedForAttack',
                 characterId: {
@@ -99,43 +99,43 @@ db.battles.insert([
                     value: 'Jaina'
                 },
                 characterSpeed: {
-                    value: 0.42
+                    value: 1.03
                 }
             },
             {
                 eventId: {
-                    uuid: 'b30fa684-b8d0-4acf-9004-2d754a902826'
+                    uuid: 'caf87700-c1bd-4271-aaf7-9dfe2ad88ee9'
                 },
                 createdAt: {
-                    date: ISODate('2024-06-15T21:02:28.565Z')
+                    date: ISODate('2024-06-16T15:08:43.433Z')
                 },
                 eventName: 'CharacterPreparedForAttack',
                 characterId: {
-                    uuid: '492e0894-4b8d-46c7-888c-bd3535e5fbc3'
+                    uuid: '24ed098d-2adc-4b1f-99d1-6455a6e273d3'
                 },
                 characterName: {
-                    value: 'Garona'
+                    value: 'Cairne'
                 },
                 characterSpeed: {
-                    value: 1.7
+                    value: 1.4
                 }
             },
             {
                 eventId: {
-                    uuid: '74e7ea4d-1fa4-4b24-87ca-fd1cbc14cd99'
+                    uuid: 'fb888f95-63cf-4c48-b114-a6ec18b8b7ab'
                 },
                 createdAt: {
-                    date: ISODate('2024-06-15T21:02:28.570Z')
+                    date: ISODate('2024-06-16T15:08:43.438Z')
                 },
                 eventName: 'CharacterWasAttacked',
                 attackerId: {
-                    uuid: '492e0894-4b8d-46c7-888c-bd3535e5fbc3'
+                    uuid: '24ed098d-2adc-4b1f-99d1-6455a6e273d3'
                 },
                 attackerName: {
-                    value: 'Garona'
+                    value: 'Cairne'
                 },
                 attackerHealthPoints: {
-                    value: 15
+                    value: 20
                 },
                 defenderId: {
                     uuid: '7431f870-1b32-4acd-9aa9-17edce6570e2'
@@ -152,10 +152,10 @@ db.battles.insert([
             },
             {
                 eventId: {
-                    uuid: '533e6cbf-cd95-465b-89ce-498dd961818d'
+                    uuid: 'adbee67b-3cf4-4c6b-8a6d-9df391c6b328'
                 },
                 createdAt: {
-                    date: ISODate('2024-06-15T21:02:28.574Z')
+                    date: ISODate('2024-06-16T15:08:43.443Z')
                 },
                 eventName: 'CharacterWasAttacked',
                 attackerId: {
@@ -168,208 +168,112 @@ db.battles.insert([
                     value: 10
                 },
                 defenderId: {
-                    uuid: '492e0894-4b8d-46c7-888c-bd3535e5fbc3'
+                    uuid: '24ed098d-2adc-4b1f-99d1-6455a6e273d3'
                 },
                 defenderName: {
-                    value: 'Garona'
+                    value: 'Cairne'
                 },
                 defenderHealthPoints: {
-                    value: 6
-                },
-                damage: {
                     value: 9
-                }
-            },
-            {
-                eventId: {
-                    uuid: '2e5a46a0-396d-43e0-9a3e-caac0149c9ea'
-                },
-                createdAt: {
-                    date: ISODate('2024-06-15T21:02:28.578Z')
-                },
-                eventName: 'CharacterPreparedForAttack',
-                characterId: {
-                    uuid: '7431f870-1b32-4acd-9aa9-17edce6570e2'
-                },
-                characterName: {
-                    value: 'Jaina'
-                },
-                characterSpeed: {
-                    value: 2.2
-                }
-            },
-            {
-                eventId: {
-                    uuid: '1856190d-4ef9-4b1b-88dd-7635a5e9a219'
-                },
-                createdAt: {
-                    date: ISODate('2024-06-15T21:02:28.581Z')
-                },
-                eventName: 'CharacterPreparedForAttack',
-                characterId: {
-                    uuid: '492e0894-4b8d-46c7-888c-bd3535e5fbc3'
-                },
-                characterName: {
-                    value: 'Garona'
-                },
-                characterSpeed: {
-                    value: 1.35
-                }
-            },
-            {
-                eventId: {
-                    uuid: 'f00fc9c2-39fa-46f0-999a-1dda7f2bfa3a'
-                },
-                createdAt: {
-                    date: ISODate('2024-06-15T21:02:28.586Z')
-                },
-                eventName: 'CharacterWasAttacked',
-                attackerId: {
-                    uuid: '7431f870-1b32-4acd-9aa9-17edce6570e2'
-                },
-                attackerName: {
-                    value: 'Jaina'
-                },
-                attackerHealthPoints: {
-                    value: 10
-                },
-                defenderId: {
-                    uuid: '492e0894-4b8d-46c7-888c-bd3535e5fbc3'
-                },
-                defenderName: {
-                    value: 'Garona'
-                },
-                defenderHealthPoints: {
-                    value: 4
-                },
-                damage: {
-                    value: 2
-                }
-            },
-            {
-                eventId: {
-                    uuid: '51a36ef2-6010-49a8-87b9-d8174f129889'
-                },
-                createdAt: {
-                    date: ISODate('2024-06-15T21:02:28.590Z')
-                },
-                eventName: 'CharacterWasAttacked',
-                attackerId: {
-                    uuid: '492e0894-4b8d-46c7-888c-bd3535e5fbc3'
-                },
-                attackerName: {
-                    value: 'Garona'
-                },
-                attackerHealthPoints: {
-                    value: 4
-                },
-                defenderId: {
-                    uuid: '7431f870-1b32-4acd-9aa9-17edce6570e2'
-                },
-                defenderName: {
-                    value: 'Jaina'
-                },
-                defenderHealthPoints: {
-                    value: 5
-                },
-                damage: {
-                    value: 5
-                }
-            },
-            {
-                eventId: {
-                    uuid: '47c73c86-2cd9-4b5a-aea6-44cc1f1ec1e0'
-                },
-                createdAt: {
-                    date: ISODate('2024-06-15T21:02:28.592Z')
-                },
-                eventName: 'CharacterPreparedForAttack',
-                characterId: {
-                    uuid: '7431f870-1b32-4acd-9aa9-17edce6570e2'
-                },
-                characterName: {
-                    value: 'Jaina'
-                },
-                characterSpeed: {
-                    value: 2.14
-                }
-            },
-            {
-                eventId: {
-                    uuid: '0a061267-e364-42b3-8125-6c41998b2dc2'
-                },
-                createdAt: {
-                    date: ISODate('2024-06-15T21:02:28.594Z')
-                },
-                eventName: 'CharacterPreparedForAttack',
-                characterId: {
-                    uuid: '492e0894-4b8d-46c7-888c-bd3535e5fbc3'
-                },
-                characterName: {
-                    value: 'Garona'
-                },
-                characterSpeed: {
-                    value: 0.11
-                }
-            },
-            {
-                eventId: {
-                    uuid: 'c76520f4-cd1c-445b-825c-94458b6576d4'
-                },
-                createdAt: {
-                    date: ISODate('2024-06-15T21:02:28.597Z')
-                },
-                eventName: 'CharacterWasAttacked',
-                attackerId: {
-                    uuid: '7431f870-1b32-4acd-9aa9-17edce6570e2'
-                },
-                attackerName: {
-                    value: 'Jaina'
-                },
-                attackerHealthPoints: {
-                    value: 5
-                },
-                defenderId: {
-                    uuid: '492e0894-4b8d-46c7-888c-bd3535e5fbc3'
-                },
-                defenderName: {
-                    value: 'Garona'
-                },
-                defenderHealthPoints: {
-                    value: 0
-                },
-                damage: {
-                    value: 6
-                }
-            },
-            {
-                eventId: {
-                    uuid: '9381a207-eb1a-4d17-9cc7-d35438721d00'
-                },
-                createdAt: {
-                    date: ISODate('2024-06-15T21:02:28.605Z')
-                },
-                eventName: 'CharacterWasAttacked',
-                attackerId: {
-                    uuid: '492e0894-4b8d-46c7-888c-bd3535e5fbc3'
-                },
-                attackerName: {
-                    value: 'Garona'
-                },
-                attackerHealthPoints: {
-                    value: 0
-                },
-                defenderId: {
-                    uuid: '7431f870-1b32-4acd-9aa9-17edce6570e2'
-                },
-                defenderName: {
-                    value: 'Jaina'
-                },
-                defenderHealthPoints: {
-                    value: 0
                 },
                 damage: {
                     value: 11
+                }
+            },
+            {
+                eventId: {
+                    uuid: '4aa6e8cf-7e04-41af-a55b-738cede1d8e9'
+                },
+                createdAt: {
+                    date: ISODate('2024-06-16T15:08:43.448Z')
+                },
+                eventName: 'CharacterPreparedForAttack',
+                characterId: {
+                    uuid: '7431f870-1b32-4acd-9aa9-17edce6570e2'
+                },
+                characterName: {
+                    value: 'Jaina'
+                },
+                characterSpeed: {
+                    value: 1.98
+                }
+            },
+            {
+                eventId: {
+                    uuid: 'e3a3d12a-272e-46ed-82ce-26d4e47db0fe'
+                },
+                createdAt: {
+                    date: ISODate('2024-06-16T15:08:43.452Z')
+                },
+                eventName: 'CharacterPreparedForAttack',
+                characterId: {
+                    uuid: '24ed098d-2adc-4b1f-99d1-6455a6e273d3'
+                },
+                characterName: {
+                    value: 'Cairne'
+                },
+                characterSpeed: {
+                    value: 3.32
+                }
+            },
+            {
+                eventId: {
+                    uuid: 'e1ef414c-aafc-4d30-8f07-7d9f29cf80e3'
+                },
+                createdAt: {
+                    date: ISODate('2024-06-16T15:08:43.455Z')
+                },
+                eventName: 'CharacterWasAttacked',
+                attackerId: {
+                    uuid: '24ed098d-2adc-4b1f-99d1-6455a6e273d3'
+                },
+                attackerName: {
+                    value: 'Cairne'
+                },
+                attackerHealthPoints: {
+                    value: 9
+                },
+                defenderId: {
+                    uuid: '7431f870-1b32-4acd-9aa9-17edce6570e2'
+                },
+                defenderName: {
+                    value: 'Jaina'
+                },
+                defenderHealthPoints: {
+                    value: 4
+                },
+                damage: {
+                    value: 6
+                }
+            },
+            {
+                eventId: {
+                    uuid: '4609a43c-fc15-45e5-9763-bba0e6c34ef0'
+                },
+                createdAt: {
+                    date: ISODate('2024-06-16T15:08:43.457Z')
+                },
+                eventName: 'CharacterWasAttacked',
+                attackerId: {
+                    uuid: '7431f870-1b32-4acd-9aa9-17edce6570e2'
+                },
+                attackerName: {
+                    value: 'Jaina'
+                },
+                attackerHealthPoints: {
+                    value: 4
+                },
+                defenderId: {
+                    uuid: '24ed098d-2adc-4b1f-99d1-6455a6e273d3'
+                },
+                defenderName: {
+                    value: 'Cairne'
+                },
+                defenderHealthPoints: {
+                    value: 0
+                },
+                damage: {
+                    value: 10
                 }
             }
         ],

@@ -57,7 +57,7 @@ export class BattleController {
         },
         defenderId: {
           type: 'string',
-          example: '492e0894-4b8d-46c7-888c-bd3535e5fbc3',
+          example: '24ed098d-2adc-4b1f-99d1-6455a6e273d3',
         },
       },
     },
@@ -94,6 +94,7 @@ export class BattleController {
   @Post()
   @HttpCode(200)
   async create(@Body() body: CreateBattleDTO): Promise<BattleView> {
+    // @TODO validate whether the characters are alive when creating new battle
     validateOrReject(body);
 
     const battleId = BattleId.generate();

@@ -27,6 +27,8 @@ It utilizes:
 
 ![App Screencast](./docs/swagger.png)
 
+@TODO aktualizovat tento ^ obrazok
+
 ## Requirements
 
 - install [Docker](https://docs.docker.com/engine/install/)
@@ -37,13 +39,14 @@ It utilizes:
 
 - run `task up`
   - this will spin up all docker containers, imports database seed, runs `npm i`, so it might take a minute or two
-  - if you wish to see the progess, run `taks logs` or tail logs of specific containers until everything is ready
+  - if you wish to see the progress, run `taks logs` or tail logs of specific containers until everything is ready
 
 ## Usage
 
 - run `task --list-all` to list all available commands
 - run `task down up logs` to restart the project and start tailing logs from all containers
 - run `task down && sudo rm -rf mongo/data && task up` to re-seed database and start the project
+- run `task test` to run tests
 - run `task npm <your-arguments>` to execute npm command inside the `nest` container; examples:
   - `clear && task npm -- run test`
   - `task npm -- install -g thanks`
@@ -101,6 +104,9 @@ Ran all test suites.
 - error handling (e.g. mongoose connection failures, more validations)
 - separate seeded MongoDB schema / [in-memory MongoDB server](https://www.npmjs.com/package/mongodb-memory-server) for tests
   - we don't want to modify the development data and create clutter by running the tests multiple times
+- character list pagination
+- character creation name uniqueness checking
+- validate whether the characters are alive when creating new battle
 
 ### Nice-to-haves
 

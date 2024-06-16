@@ -28,10 +28,10 @@ export class JobsController {
       character.stats(),
     ).map((jobStats: CharacterJobStats) => ({
       job: jobStats.job,
-      maximumHealthPoints: jobStats.maximumHealthPoints.toString(),
-      baseStrength: jobStats.baseStrength.toString(),
-      baseDexterity: jobStats.baseDexterity.toString(),
-      baseIntelligence: jobStats.baseIntelligence.toString(),
+      maximumHealthPoints: jobStats.maximumHealthPoints.toNumber(),
+      baseStrength: jobStats.baseStrength.toNumber(),
+      baseDexterity: jobStats.baseDexterity.toNumber(),
+      baseIntelligence: jobStats.baseIntelligence.toNumber(),
       damageModifier: jobStats.damageModifier.toString(),
       speedModifier: jobStats.speedModifier.toString(),
     }));

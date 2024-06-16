@@ -21,3 +21,7 @@ tasks:
   npm:
     cmds:
       - docker compose exec nest npm {{.CLI_ARGS}}
+  test:
+    cmds:
+      - clear
+      - task npm -- run test

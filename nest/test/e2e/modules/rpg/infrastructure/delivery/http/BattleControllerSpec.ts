@@ -78,29 +78,33 @@ describe('BattleController', () => {
 
   it('/battle/:id (GET) 200', async () => {
     const response = await request(app.getHttpServer())
-      .get('/battle/86d1bb24-e9fa-499e-a7c0-881138038e35')
+      .get('/battle/066c0485-5408-4902-b06f-85dcbf89dcd7')
       .expect(200);
 
     expect(response.body.id).toStrictEqual(
-      '86d1bb24-e9fa-499e-a7c0-881138038e35',
+      '066c0485-5408-4902-b06f-85dcbf89dcd7',
     );
     expect(response.body.attackerId).toStrictEqual(
       '7431f870-1b32-4acd-9aa9-17edce6570e2',
     );
     expect(response.body.attackerName).toStrictEqual('Jaina');
     expect(response.body.defenderId).toStrictEqual(
-      '492e0894-4b8d-46c7-888c-bd3535e5fbc3',
+      '24ed098d-2adc-4b1f-99d1-6455a6e273d3',
     );
-    expect(response.body.defenderName).toStrictEqual('Garona');
+    expect(response.body.defenderName).toStrictEqual('Cairne');
     expect(response.body.state).toStrictEqual(BattleState.Ended);
     expect(typeof response.body.createdAt).toBe('string');
     expect(isArray(response.body.battleLog)).toBeTruthy();
     expect(response.body.battleLog[0].eventId).toStrictEqual({
-      uuid: '02c93654-93f9-4cc7-9afb-9ca0ee8f75e0',
+      uuid: '02fafa2b-700f-4db9-be9d-e499bf0ba199',
     });
     expect(response.body.battleLog[0].eventName).toStrictEqual(
       'BattleWasCreated',
     );
+
+    const lastEvent = response.body.battleLog.pop();
+    expect(lastEvent.attackerHealthPoints.value).toStrictEqual(4);
+    expect(lastEvent.defenderHealthPoints.value).toStrictEqual(0);
   });
 
   it('/battle/:id (GET) 400', async () => {

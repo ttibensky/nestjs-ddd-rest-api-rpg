@@ -121,6 +121,7 @@ export class CharacterController {
   })
   @Get()
   async findAll(): Promise<CharacterView[]> {
+    // @TODO pagination
     return this.queryBus
       .execute(new SearchCharactersQuery())
       .then((characters: Character[]) =>

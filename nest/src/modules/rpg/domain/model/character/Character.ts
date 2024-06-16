@@ -14,6 +14,7 @@ import { CharacterSpeed } from './value-objects/CharacterSpeed';
 import { CharacterStrength } from './value-objects/CharacterStrength';
 import { CharacterSpeedModifier } from './value-objects/CharacterSpeedModifier';
 import { CharacterDamageModifier } from './value-objects/CharacterDamageModifier';
+import { CannotFindHandlerForEventError } from 'src/lib/common/application/handler/error/CannotFindHandlerForEventError';
 
 export abstract class Character extends AggregateRoot {
   id: CharacterId;
@@ -83,7 +84,7 @@ export abstract class Character extends AggregateRoot {
       case event instanceof CharacterPreparedForAttack:
         break;
       default:
-        throw new Error(`Unsupported event "${event.constructor.name}"`);
+        throw new CannotFindHandlerForEventError(event.constructor.name);
     }
   }
 

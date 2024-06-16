@@ -3,6 +3,7 @@ import { CharacterType } from './CharacterType';
 import { Mage } from './Mage';
 import { Thief } from './Thief';
 import { Warrior } from './Warrior';
+import { UnknownCharacterJobError } from './error/UnknownCharacterJobError';
 import { CharacterId } from './value-objects/CharacterId';
 import { CharacterJob } from './value-objects/CharacterJob';
 import { CharacterName } from './value-objects/CharacterName';
@@ -20,7 +21,7 @@ export class CharacterFactory {
     const jobs = CharacterFactory.jobs();
 
     if (!jobs.has(job)) {
-      throw new Error(`Unknown character job "${job}"`);
+      throw new UnknownCharacterJobError(job);
     }
 
     return jobs.get(job);

@@ -8,6 +8,7 @@ import { BattleState } from './value-object/BattleState';
 import { BattleHasEnded } from './event/BattleHasEnded';
 import { BattleId } from './value-object/BattleId';
 import { CharacterName } from '../character/value-objects/CharacterName';
+import { CannotFindHandlerForEventError } from 'src/lib/common/application/handler/error/CannotFindHandlerForEventError';
 
 // we might want to persist the battle with all battle log in the database in the future
 export class Battle extends AggregateRoot {
@@ -53,7 +54,7 @@ export class Battle extends AggregateRoot {
         this.whenBattleHasEnded(event);
         break;
       default:
-        throw new Error(`Unsupported event "${event.constructor.name}"`);
+        throw new CannotFindHandlerForEventError(event.constructor.name);
     }
   }
 

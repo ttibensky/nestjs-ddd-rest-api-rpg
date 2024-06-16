@@ -1,5 +1,6 @@
 import { Logger } from '@nestjs/common';
 import { CommandBus, EventsHandler, IEventHandler } from '@nestjs/cqrs';
+import { CannotFindHandlerForEventError } from 'src/lib/common/application/handler/error/CannotFindHandlerForEventError';
 import { BaseEvent } from 'src/lib/common/domain/model/BaseEvent';
 import { EndBattleCommand } from 'src/modules/rpg/domain/model/battle/command/EndBattleCommand';
 import { BattleHasEnded } from 'src/modules/rpg/domain/model/battle/event/BattleHasEnded';
@@ -69,9 +70,7 @@ export class BattleProcess implements IEventHandler<BaseEvent> {
         this.onBattleHasEnded(event);
         break;
       default:
-        throw new Error(
-          `Cannot find handler for event "${event.constructor.name}"`,
-        );
+        throw new CannotFindHandlerForEventError(event.constructor.name);
     }
 
     this.logger.debug(

@@ -47,6 +47,8 @@ It utilizes:
 - run `task down up logs` to restart the project and start tailing logs from all containers
 - run `task down && sudo rm -rf mongo/data && task up` to re-seed database and start the project
 - run `task test` to run tests
+  - you can also run only a single suite `clear && task npm -- run test test/unit`
+  - or a specific test `clear && task npm -- run test test/e2e/modules/rpg/infrastructure/delivery/http/BattleControllerSpec.ts`
 - run `task npm <your-arguments>` to execute npm command inside the `nest` container; examples:
   - `clear && task npm -- run test`
   - `task npm -- install -g thanks`
@@ -54,37 +56,44 @@ It utilizes:
 This is how the test output should look like (if you run the tests on the seeded database):
 
 ```bash
+task: [test] task npm -- run test
 task: [npm] docker compose exec nest npm run test
 
 > nest@0.0.1 test
 > jest --config=test/jest.config.json
 
+ PASS  test/unit/modules/rpg/domain/model/character/CharacterSpec.ts
+  Character
+    ✓ create (6 ms)
+    ✓ prepareForAttack (1 ms)
+    ✓ attack (1 ms)
+
  PASS  test/e2e/modules/rpg/infrastructure/delivery/http/JobsControllerSpec.ts
   JobController
-    ✓ /job (GET) 200 (199 ms)
+    ✓ /job (GET) 200 (154 ms)
 
  PASS  test/e2e/modules/rpg/infrastructure/delivery/http/CharacterControllerSpec.ts
   CharacterController
-    ✓ /character (POST) 200 (232 ms)
-    ✓ /character (POST) 400 (24 ms)
-    ✓ /character (GET) 200 (35 ms)
+    ✓ /character (POST) 200 (176 ms)
+    ✓ /character (POST) 400 (29 ms)
+    ✓ /character (GET) 200 (22 ms)
     ✓ /character/:id (GET) 200 (20 ms)
-    ✓ /character/:id (GET) 400 (21 ms)
-    ✓ /character/:id (GET) 404 (19 ms)
+    ✓ /character/:id (GET) 400 (17 ms)
+    ✓ /character/:id (GET) 404 (24 ms)
 
  PASS  test/e2e/modules/rpg/infrastructure/delivery/http/BattleControllerSpec.ts
   BattleController
-    ✓ /battle (POST) 200 (225 ms)
-    ✓ /battle (POST) 400 (34 ms)
-    ✓ /battle (POST) 404 (51 ms)
-    ✓ /battle/:id (GET) 200 (22 ms)
+    ✓ /battle (POST) 200 (214 ms)
+    ✓ /battle (POST) 400 (32 ms)
+    ✓ /battle (POST) 404 (34 ms)
+    ✓ /battle/:id (GET) 200 (23 ms)
     ✓ /battle/:id (GET) 400 (18 ms)
-    ✓ /battle/:id (GET) 404 (18 ms)
+    ✓ /battle/:id (GET) 404 (20 ms)
 
-Test Suites: 3 passed, 3 total
-Tests:       13 passed, 13 total
+Test Suites: 4 passed, 4 total
+Tests:       16 passed, 16 total
 Snapshots:   0 total
-Time:        3.281 s
+Time:        4.695 s
 Ran all test suites.
 ```
 

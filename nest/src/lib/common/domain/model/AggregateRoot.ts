@@ -6,7 +6,9 @@ export abstract class AggregateRoot {
   // we are using a generator instead of returning an array
   // to force other developers to consume the events in the correct order
   *shiftEvents(): Generator<BaseEvent | undefined> {
-    yield this.events.shift();
+    while (this.events.length > 0) {
+      yield this.events.shift();
+    }
   }
 
   protected recordThat(event: BaseEvent): void {

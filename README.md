@@ -20,6 +20,7 @@ It utilizes:
   - [date-fns](https://www.npmjs.com/package/date-fns) to make work with dates easier
   - [purify-ts](https://www.npmjs.com/package/purify-ts) to provide a funcional (and more readable) way of handling and avoiding null values and nested conditions
   - [uuid](https://www.npmjs.com/package/uuid) to generate IDs and primary keys for entities, commands, events and queries
+  - [Lodash](https://lodash.com/) to provide utility functions for easier coding
 - command line utilities:
   - [Docker](https://www.docker.com/) for stable environment
   - [Task](https://taskfile.dev/) for easier command line usage
@@ -66,7 +67,6 @@ It utilizes:
 ### Must-haves in a real-world project
 
 - (de)serialization of commands, events, queries and views
-- use custom errors instead of the build-in `Error` class
 - error handling (e.g. mongoose connection failures, more validations)
 - asynchronous command and event processing (we are already using command bus and event bus)
 - correlation and causation ids for requests, commands, queries, events and arbitrary log message contexts
@@ -82,3 +82,10 @@ It utilizes:
 - [https://www.domainlanguage.com/ddd/blue-book/](https://www.domainlanguage.com/ddd/blue-book/)
 - [https://docs.nestjs.com/](https://docs.nestjs.com/)
 - [https://dev.to/sairyss/domain-driven-hexagon-18g5](https://dev.to/sairyss/domain-driven-hexagon-18g5)
+
+## Lessons learned
+
+- I went into an issue with class inheritance and types with `Character` class and it's children, resulting into using a union type for its child classes
+  - Next time, I would try to use object literals, types and function constructors instead of classes
+  - Object literals would also allow to use destructuring and spread operator for object manipulation
+  - Lastly, code would probably become much more readable and usable by frontend devs that are used to work with React.js

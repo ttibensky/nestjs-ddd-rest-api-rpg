@@ -1,3 +1,4 @@
+import { round } from 'lodash';
 import { Character } from './Character';
 import { CharacterJobStats } from './CharacterJobStats';
 import { CharacterWasCreated } from './event/CharacterWasCreated';
@@ -65,14 +66,15 @@ export class Mage extends Character {
 
   protected calculateSpeed(): CharacterSpeed {
     return new CharacterSpeed(
-      Math.round(
+      round(
         [
           this.baseDexterity.toNumber() *
             this.calculateModifier(0, MAGE_SPEED_DEXTERITY_MODIFIER),
           this.baseStrength.toNumber() *
             this.calculateModifier(0, MAGE_SPEED_STRENGTH_MODIFIER),
-        ].reduce((prev, current) => prev + current, 0) * 100,
-      ) / 100,
+        ].reduce((prev, current) => prev + current, 0),
+        2,
+      ),
     );
   }
 
@@ -80,7 +82,7 @@ export class Mage extends Character {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   protected calculateDamage(defender: Character): CharacterHealthPoints {
     return new CharacterHealthPoints(
-      Math.round(
+      round(
         [
           this.baseStrength.toNumber() *
             this.calculateModifier(0, MAGE_DAMAGE_STRENGTH_MODIFIER),

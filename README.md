@@ -67,9 +67,10 @@ It utilizes:
 ### Must-haves in a real-world project
 
 - (de)serialization of commands, events, queries and views
-- error handling (e.g. mongoose connection failures, more validations)
+  - this is needed to get rid of incorrect serialization of value objects and also a prerequisite for asynchronous command and event processing
 - asynchronous command and event processing (we are already using command bus and event bus)
 - correlation and causation ids for requests, commands, queries, events and arbitrary log message contexts
+- error handling (e.g. mongoose connection failures, more validations)
 
 ### Nice-to-haves
 

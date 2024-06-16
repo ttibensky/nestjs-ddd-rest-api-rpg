@@ -1,9 +1,10 @@
-import { ValidationPipe } from '@nestjs/common';
+import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { APP_PIPE } from '@nestjs/core';
 import { Test, TestingModule } from '@nestjs/testing';
+import mongoose from 'mongoose';
 import { AppModule } from 'src/app.module';
 
-export default async function initNest() {
+export async function initNest(): Promise<INestApplication<any>> {
   const moduleFixture: TestingModule = await Test.createTestingModule({
     imports: [AppModule],
     providers: [
@@ -18,4 +19,9 @@ export default async function initNest() {
   await app.init();
 
   return app;
+}
+
+export async function clearNest(app: INestApplication<any>): Promise<void> {
+  await app.close();
+  await mongoose.disconnect();
 }

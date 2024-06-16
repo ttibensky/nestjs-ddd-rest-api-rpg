@@ -1,14 +1,79 @@
 import { INestApplication } from '@nestjs/common';
-import { isArray } from 'lodash';
+import { isArray, isObject } from 'lodash';
 import { BattleState } from 'src/modules/rpg/domain/model/battle/value-object/BattleState';
 import * as request from 'supertest';
-import initNest from 'test/e2e/jestHelper';
+import { clearNest, initNest } from 'test/e2e/jestHelper';
 
 describe('BattleController', () => {
   let app: INestApplication;
 
   beforeEach(async () => {
     app = await initNest();
+  });
+
+  it('/battle (POST) 200', async () => {
+    const attackerResponse = await request(app.getHttpServer())
+      .post('/character')
+      .send({
+        name: 'Attacker',
+        job: 'mage',
+      })
+      .expect(200);
+
+    const defenderResponse = await request(app.getHttpServer())
+      .post('/character')
+      .send({
+        name: 'Deffender',
+        job: 'thief',
+      })
+      .expect(200);
+
+    const battleResponse = await request(app.getHttpServer())
+      .post('/battle')
+      .send({
+        attackerId: attackerResponse.body.id,
+        defenderId: defenderResponse.body.id,
+      })
+      .expect(200);
+
+    expect(isObject(battleResponse.body)).toBeTruthy();
+    expect(typeof battleResponse.body.id).toBe('string');
+    expect(battleResponse.body.attackerId).toStrictEqual(
+      attackerResponse.body.id,
+    );
+    expect(battleResponse.body.attackerName).toStrictEqual('Attacker');
+    expect(battleResponse.body.defenderId).toStrictEqual(
+      defenderResponse.body.id,
+    );
+    expect(battleResponse.body.defenderName).toStrictEqual('Deffender');
+    expect(battleResponse.body.state).toStrictEqual(BattleState.Ongoing);
+    expect(typeof battleResponse.body.createdAt).toBe('string');
+    expect(battleResponse.body.battleLog).toStrictEqual([]);
+  });
+
+  it('/battle (POST) 400', async () => {
+    const response = await request(app.getHttpServer())
+      .post('/battle')
+      .send({
+        attackerId: 'xxxx', // invalid UUIDv4 string
+        defenderId: 'xxxx', // invalid UUIDv4 string
+      })
+      .expect(400);
+
+    expect(response.body.message).toStrictEqual([
+      'attackerId must match /^[\\d\\w]{8}-[\\d\\w]{4}-[\\d\\w]{4}-[\\d\\w]{4}-[\\d\\w]{12}$/ regular expression',
+      'defenderId must match /^[\\d\\w]{8}-[\\d\\w]{4}-[\\d\\w]{4}-[\\d\\w]{4}-[\\d\\w]{12}$/ regular expression',
+    ]);
+  });
+
+  it('/battle (POST) 404', () => {
+    return request(app.getHttpServer())
+      .post('/battle')
+      .send({
+        attackerId: '89469247-5fbd-47dd-ac1a-f6c23ea5e1ea', // character with this ID does not exist
+        defenderId: 'dde47ce0-3ce0-4e09-a85f-3bc0abddb9ab', // character with this ID does not exist
+      })
+      .expect(404);
   });
 
   it('/battle/:id (GET) 200', async () => {
@@ -40,7 +105,7 @@ describe('BattleController', () => {
 
   it('/battle/:id (GET) 400', async () => {
     const response = await request(app.getHttpServer())
-      .get('/battle/xxxx')
+      .get('/battle/xxxx') // invalid UUIDv4 string
       .expect(400);
 
     expect(response.body.message).toStrictEqual(
@@ -50,11 +115,11 @@ describe('BattleController', () => {
 
   it('/battle/:id (GET) 404', () => {
     return request(app.getHttpServer())
-      .get('/battle/f2d294ad-0a1a-47f3-99fb-ff9b9818bb18')
+      .get('/battle/f2d294ad-0a1a-47f3-99fb-ff9b9818bb18') // battle with this ID does not exist
       .expect(404);
   });
 
   afterAll(async () => {
-    await app.close();
+    await clearNest(app);
   });
 });

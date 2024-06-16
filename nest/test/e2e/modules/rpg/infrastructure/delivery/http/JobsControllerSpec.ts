@@ -1,6 +1,6 @@
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
-import initNest from 'test/e2e/jestHelper';
+import { clearNest, initNest } from 'test/e2e/jestHelper';
 
 describe('JobController', () => {
   let app: INestApplication;
@@ -47,6 +47,6 @@ describe('JobController', () => {
   });
 
   afterAll(async () => {
-    await app.close();
+    await clearNest(app);
   });
 });

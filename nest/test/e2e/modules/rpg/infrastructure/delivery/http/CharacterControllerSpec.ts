@@ -1,7 +1,7 @@
 import { INestApplication } from '@nestjs/common';
 import { isArray, isObject } from 'lodash';
 import * as request from 'supertest';
-import initNest from 'test/e2e/jestHelper';
+import { clearNest, initNest } from 'test/e2e/jestHelper';
 
 describe('CharacterController', () => {
   let app: INestApplication;
@@ -38,8 +38,8 @@ describe('CharacterController', () => {
     const response = await request(app.getHttpServer())
       .post('/character')
       .send({
-        name: 'Sylvanas Windrunner',
-        job: 'hunter',
+        name: 'Sylvanas Windrunner', // too long, contains space
+        job: 'hunter', // unsupported job
       })
       .expect(400);
 
@@ -93,7 +93,7 @@ describe('CharacterController', () => {
 
   it('/character/:id (GET) 400', async () => {
     const response = await request(app.getHttpServer())
-      .get('/character/xxxx')
+      .get('/character/xxxx') // invalid UUIDv4 string
       .expect(400);
 
     expect(response.body.message).toStrictEqual(
@@ -103,11 +103,11 @@ describe('CharacterController', () => {
 
   it('/character/:id (GET) 404', () => {
     return request(app.getHttpServer())
-      .get('/character/f2d294ad-0a1a-47f3-99fb-ff9b9818bb18')
+      .get('/character/f2d294ad-0a1a-47f3-99fb-ff9b9818bb18') // character with this ID does not exist
       .expect(404);
   });
 
   afterAll(async () => {
-    await app.close();
+    await clearNest(app);
   });
 });

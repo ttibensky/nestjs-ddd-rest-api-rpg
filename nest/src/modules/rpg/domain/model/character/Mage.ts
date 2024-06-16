@@ -1,4 +1,5 @@
 import { Character } from './Character';
+import { CharacterJobStats } from './CharacterJobStats';
 import { CharacterWasCreated } from './event/CharacterWasCreated';
 import { CharacterDamageModifier } from './value-objects/CharacterDamageModifier';
 import { CharacterDexterity } from './value-objects/CharacterDexterity';
@@ -18,31 +19,44 @@ const MAGE_SPEED_DEXTERITY_MODIFIER = 0.4;
 const MAGE_SPEED_STRENGTH_MODIFIER = 0.1;
 
 export class Mage extends Character {
+  static stats() {
+    return new CharacterJobStats(
+      CharacterJob.Mage,
+      new CharacterHealthPoints(12),
+      new CharacterStrength(5),
+      new CharacterDexterity(6),
+      new CharacterIntelligence(10),
+      new CharacterDamageModifier(
+        [
+          `${MAGE_DAMAGE_STRENGTH_MODIFIER * 100}% of strength`,
+          `${MAGE_DAMAGE_DEXTERITY_MODIFIER * 100}% of dexterity`,
+          `${MAGE_DAMAGE_INTELLIGENCE_MODIFIER * 100}% of intelligence`,
+        ].join(', '),
+      ),
+      new CharacterSpeedModifier(
+        [
+          `${MAGE_SPEED_DEXTERITY_MODIFIER * 100}% of dexterity`,
+          `${MAGE_SPEED_STRENGTH_MODIFIER * 100}% of strength`,
+        ].join(', '),
+      ),
+    );
+  }
+
   static create(id: CharacterId, name: CharacterName): Mage {
     const character = new Mage();
+    const stats = Mage.stats();
 
     character.recordThat(
       new CharacterWasCreated(
         id,
         name,
-        CharacterJob.Mage,
-        new CharacterHealthPoints(12),
-        new CharacterStrength(5),
-        new CharacterDexterity(6),
-        new CharacterIntelligence(10),
-        new CharacterDamageModifier(
-          [
-            `${MAGE_DAMAGE_STRENGTH_MODIFIER * 100}% of strength`,
-            `${MAGE_DAMAGE_DEXTERITY_MODIFIER * 100}% of dexterity`,
-            `${MAGE_DAMAGE_INTELLIGENCE_MODIFIER * 100}% of intelligence`,
-          ].join(', '),
-        ),
-        new CharacterSpeedModifier(
-          [
-            `${MAGE_SPEED_DEXTERITY_MODIFIER * 100}% of dexterity`,
-            `${MAGE_SPEED_STRENGTH_MODIFIER * 100}% of strength`,
-          ].join(', '),
-        ),
+        stats.job,
+        stats.maximumHealthPoints,
+        stats.baseStrength,
+        stats.baseDexterity,
+        stats.baseIntelligence,
+        stats.damageModifier,
+        stats.speedModifier,
       ),
     );
 

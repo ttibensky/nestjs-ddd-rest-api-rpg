@@ -1,4 +1,5 @@
 import { Character } from './Character';
+import { CharacterJobStats } from './CharacterJobStats';
 import { CharacterWasCreated } from './event/CharacterWasCreated';
 import { CharacterDamageModifier } from './value-objects/CharacterDamageModifier';
 import { CharacterDexterity } from './value-objects/CharacterDexterity';
@@ -17,30 +18,43 @@ const WARRIOR_SPEED_DEXTERITY_MODIFIER = 0.6;
 const WARRIOR_SPEED_INTELLIGENCE_MODIFIER = 0.2;
 
 export class Warrior extends Character {
+  static stats() {
+    return new CharacterJobStats(
+      CharacterJob.Warrior,
+      new CharacterHealthPoints(20),
+      new CharacterStrength(10),
+      new CharacterDexterity(5),
+      new CharacterIntelligence(5),
+      new CharacterDamageModifier(
+        [
+          `${WARRIOR_DAMAGE_STRENGTH_MODIFIER * 100}% of strength`,
+          `${WARRIOR_DAMAGE_DEXTERITY_MODIFIER * 100}% of dexterity`,
+        ].join(', '),
+      ),
+      new CharacterSpeedModifier(
+        [
+          `${WARRIOR_SPEED_DEXTERITY_MODIFIER * 100}% of dexterity`,
+          `${WARRIOR_SPEED_INTELLIGENCE_MODIFIER * 100}% of intelligence`,
+        ].join(', '),
+      ),
+    );
+  }
+
   static create(id: CharacterId, name: CharacterName): Warrior {
     const character = new Warrior();
+    const stats = Warrior.stats();
 
     character.recordThat(
       new CharacterWasCreated(
         id,
         name,
-        CharacterJob.Warrior,
-        new CharacterHealthPoints(20),
-        new CharacterStrength(10),
-        new CharacterDexterity(5),
-        new CharacterIntelligence(5),
-        new CharacterDamageModifier(
-          [
-            `${WARRIOR_DAMAGE_STRENGTH_MODIFIER * 100}% of strength`,
-            `${WARRIOR_DAMAGE_DEXTERITY_MODIFIER * 100}% of dexterity`,
-          ].join(', '),
-        ),
-        new CharacterSpeedModifier(
-          [
-            `${WARRIOR_SPEED_DEXTERITY_MODIFIER * 100}% of dexterity`,
-            `${WARRIOR_SPEED_INTELLIGENCE_MODIFIER * 100}% of intelligence`,
-          ].join(', '),
-        ),
+        stats.job,
+        stats.maximumHealthPoints,
+        stats.baseStrength,
+        stats.baseDexterity,
+        stats.baseIntelligence,
+        stats.damageModifier,
+        stats.speedModifier,
       ),
     );
 

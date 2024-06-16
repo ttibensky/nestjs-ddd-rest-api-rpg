@@ -1,4 +1,5 @@
 import { Character } from './Character';
+import { CharacterJobStats } from './CharacterJobStats';
 import { CharacterWasCreated } from './event/CharacterWasCreated';
 import { CharacterDamageModifier } from './value-objects/CharacterDamageModifier';
 import { CharacterDexterity } from './value-objects/CharacterDexterity';
@@ -17,28 +18,41 @@ const THIEF_DAMAGE_INTELLIGENCE_MODIFIER = 0.25;
 const THIEF_SPEED_DEXTERITY_MODIFIER = 0.8;
 
 export class Thief extends Character {
+  static stats() {
+    return new CharacterJobStats(
+      CharacterJob.Thief,
+      new CharacterHealthPoints(15),
+      new CharacterStrength(4),
+      new CharacterDexterity(10),
+      new CharacterIntelligence(4),
+      new CharacterDamageModifier(
+        [
+          `${THIEF_DAMAGE_STRENGTH_MODIFIER * 100}% of strength`,
+          `${THIEF_DAMAGE_DEXTERITY_MODIFIER * 100}% of dexterity`,
+          `${THIEF_DAMAGE_INTELLIGENCE_MODIFIER * 100}% of intelligence`,
+        ].join(', '),
+      ),
+      new CharacterSpeedModifier(
+        [`${THIEF_SPEED_DEXTERITY_MODIFIER * 100}% of dexterity`].join(', '),
+      ),
+    );
+  }
+
   static create(id: CharacterId, name: CharacterName): Thief {
     const character = new Thief();
+    const stats = Thief.stats();
 
     character.recordThat(
       new CharacterWasCreated(
         id,
         name,
-        CharacterJob.Thief,
-        new CharacterHealthPoints(15),
-        new CharacterStrength(4),
-        new CharacterDexterity(10),
-        new CharacterIntelligence(4),
-        new CharacterDamageModifier(
-          [
-            `${THIEF_DAMAGE_STRENGTH_MODIFIER * 100}% of strength`,
-            `${THIEF_DAMAGE_DEXTERITY_MODIFIER * 100}% of dexterity`,
-            `${THIEF_DAMAGE_INTELLIGENCE_MODIFIER * 100}% of intelligence`,
-          ].join(', '),
-        ),
-        new CharacterSpeedModifier(
-          [`${THIEF_SPEED_DEXTERITY_MODIFIER * 100}% of dexterity`].join(', '),
-        ),
+        stats.job,
+        stats.maximumHealthPoints,
+        stats.baseStrength,
+        stats.baseDexterity,
+        stats.baseIntelligence,
+        stats.damageModifier,
+        stats.speedModifier,
       ),
     );
 

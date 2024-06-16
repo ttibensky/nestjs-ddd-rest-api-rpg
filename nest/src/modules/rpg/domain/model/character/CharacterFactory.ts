@@ -1,4 +1,5 @@
 import { Character } from './Character';
+import { CharacterType } from './CharacterType';
 import { Mage } from './Mage';
 import { Thief } from './Thief';
 import { Warrior } from './Warrior';
@@ -15,18 +16,23 @@ export class CharacterFactory {
     return this.getClass(job).create(id, name);
   }
 
-  static getClass(
-    job: CharacterJob,
-  ): typeof Warrior | typeof Thief | typeof Mage {
-    switch (true) {
-      case job === CharacterJob.Warrior:
-        return Warrior;
-      case job === CharacterJob.Thief:
-        return Thief;
-      case job === CharacterJob.Mage:
-        return Mage;
-      default:
-        throw new Error(`Unknown character job "${job}"`);
+  static getClass(job: CharacterJob): CharacterType {
+    const jobs = CharacterFactory.jobs();
+
+    if (!jobs.has(job)) {
+      throw new Error(`Unknown character job "${job}"`);
     }
+
+    return jobs.get(job);
+  }
+
+  static jobs(): Map<CharacterJob, CharacterType> {
+    const map = new Map();
+
+    map.set(CharacterJob.Warrior, Warrior);
+    map.set(CharacterJob.Thief, Thief);
+    map.set(CharacterJob.Mage, Mage);
+
+    return map;
   }
 }

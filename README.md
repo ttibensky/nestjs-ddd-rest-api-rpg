@@ -68,6 +68,7 @@ It utilizes:
 
 ### Must-haves in a real-world project
 
+- (de)serialization of commands, events, queries and views
 - use custom errors instead of the build-in `Error` class
 - error handling (e.g. mongoose connection failures, more validations)
 - asynchronous command and event processing (we are already using command bus and event bus)

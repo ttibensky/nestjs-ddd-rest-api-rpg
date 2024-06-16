@@ -20,6 +20,7 @@ import { CharacterSchema } from './infrastructure/persistence/mongoose/schema/ch
 import { SearchCharactersQueryHandler } from './application/handler/query/character/SearchCharactersQueryHandler';
 import { PrepareCharacterForAttackCommandHandler } from './application/handler/command/character/PrepareCharacterForAttackCommandHandler';
 import { AttackCharacterCommandHandler } from './application/handler/command/character/AttackCharacterCommandHandler';
+import { JobsController } from './infrastructure/delivery/http/JobsController';
 
 @Module({
   imports: [
@@ -29,7 +30,7 @@ import { AttackCharacterCommandHandler } from './application/handler/command/cha
     ]),
     MongooseModule.forFeature([{ name: Battle.name, schema: BattleSchema }]),
   ],
-  controllers: [CharacterController, BattleController],
+  controllers: [JobsController, CharacterController, BattleController],
   providers: [
     // command handlers
     ...[

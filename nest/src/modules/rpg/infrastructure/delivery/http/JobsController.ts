@@ -8,9 +8,9 @@ import {
 import { CharacterFactory } from 'src/modules/rpg/domain/model/character/CharacterFactory';
 import { CharacterJobStats } from 'src/modules/rpg/domain/model/character/CharacterJobStats';
 
-@ApiTags('jobs')
+@ApiTags('job')
 @ApiExtraModels(CharacterJobStats)
-@Controller('jobs')
+@Controller('job')
 export class JobsController {
   @ApiResponse({
     status: 200,

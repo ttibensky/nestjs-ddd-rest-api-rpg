@@ -7,6 +7,7 @@ import { BaseMongooseRepository } from 'src/lib/common/infrastructure/domain/mod
 import { Battle } from 'src/modules/rpg/domain/model/battle/Battle';
 import { Battles } from 'src/modules/rpg/domain/model/battle/Battles';
 import { BattleId } from 'src/modules/rpg/domain/model/battle/value-object/BattleId';
+import { BattleNotFoundError } from './error/BattleNotFoundError';
 
 @Injectable()
 export class MongooseBattles extends BaseMongooseRepository implements Battles {

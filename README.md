@@ -122,7 +122,7 @@ Ran all test suites.
 
 ## Lessons learned
 
-- I haven't realized how complicated it might be to write a working test for `BattleProcess` because of the `CQRS`
+- I haven't realized how complicated it might be to write a working test for `BattleProcess` because of the `CQRS`. This is the first time I used `CQRS` with `Nest.js` and I overestimated the tests difficulty.
   - Next time, I would create a proof of concept with the test first and then decide how to proceed to be able to finish the assignment in time
   - I think it might have been easier if I used `Sagas` right from the beginning, because now I'm stuck with the following error:
 

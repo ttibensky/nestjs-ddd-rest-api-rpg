@@ -5,6 +5,7 @@ import {
   HttpCode,
   NotFoundException,
   Param,
+  ParseUUIDPipe,
   Post,
 } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
@@ -59,6 +60,36 @@ export class CharacterController {
       $ref: getSchemaPath(CharacterView),
     },
   })
+  @ApiResponse({
+    status: 400,
+    description: [
+      'name must contain letters or _ (underscore) characters and have a length between 4 and 15 characters inclusive',
+      'job must be one of warrior, thief, mage',
+    ].join('<br>'),
+    schema: {
+      example: {
+        message: [
+          'name must match /^[a-zA-Z_]{4,15}$/ regular expression',
+          'job must be one of the following values: warrior, thief, mage',
+        ],
+        error: 'Bad Request',
+        statusCode: 400,
+      },
+    },
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'job must be one of warrior, thief, mage',
+    schema: {
+      example: {
+        message: [
+          'job must be one of the following values: warrior, thief, mage',
+        ],
+        error: 'Bad Request',
+        statusCode: 400,
+      },
+    },
+  })
   @Post()
   @HttpCode(200)
   async create(@Body() body: CreateCharacterDTO): Promise<CharacterView> {
@@ -109,6 +140,16 @@ export class CharacterController {
     },
   })
   @ApiResponse({
+    status: 400,
+    schema: {
+      example: {
+        message: 'Validation failed (uuid is expected)',
+        error: 'Bad Request',
+        statusCode: 400,
+      },
+    },
+  })
+  @ApiResponse({
     status: 404,
     schema: {
       example: {
@@ -118,7 +159,8 @@ export class CharacterController {
     },
   })
   @Get(':id')
-  async find(@Param('id') id: string): Promise<CharacterView> {
+  async find(@Param('id', ParseUUIDPipe) id: string): Promise<CharacterView> {
+    // @TODO check that id param is a valid UUIDv4 string
     return this.findCharacter(CharacterId.fromString(id));
   }
 

@@ -52,9 +52,6 @@ It utilizes:
 
 ### Based on the instructions
 
-- add job list endpoint
-  - data for character cration screen
-- add validation errors to Swagger
 - add tests
 
 #### Nite-to-haves

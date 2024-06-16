@@ -10,6 +10,7 @@ import { Characters } from 'src/modules/rpg/domain/model/character/Characters';
 import { SearchCharactersQuery } from 'src/modules/rpg/domain/model/character/query/SearchCharactersQuery';
 import { CharacterId } from 'src/modules/rpg/domain/model/character/value-objects/CharacterId';
 import { CharacterJob } from 'src/modules/rpg/domain/model/character/value-objects/CharacterJob';
+import { CharacterNotFoundError } from './error/CharacterNotFoundError';
 
 @Injectable()
 export class MongooseCharacters
@@ -23,10 +24,18 @@ export class MongooseCharacters
     super(eventBus);
   }
 
-  async get(id: CharacterId): Promise<Either<Error, Character>> {
-    return (await this.find(id)).toEither(
-      new Error(`Character not found for ID ${id.toString()}`),
-    );
+  async get(
+    id: CharacterId,
+  ): Promise<Either<CharacterNotFoundError, Character>> {
+    return (await this.find(id))
+      .toEither(
+        new CharacterNotFoundError(
+          `Character not found for ID ${id.toString()}`,
+        ),
+      )
+      .ifLeft((e) => {
+        throw e;
+      });
   }
 
   async find(id: CharacterId): Promise<Maybe<Character>> {

@@ -17,10 +17,14 @@ export class MongooseBattles extends BaseMongooseRepository implements Battles {
     super(eventBus);
   }
 
-  async get(id: BattleId): Promise<Either<Error, Battle>> {
-    return (await this.find(id)).toEither(
-      new Error(`Battle not found for ID ${id.toString()}`),
-    );
+  async get(id: BattleId): Promise<Either<BattleNotFoundError, Battle>> {
+    return (await this.find(id))
+      .toEither(
+        new BattleNotFoundError(`Battle not found for ID ${id.toString()}`),
+      )
+      .ifLeft((e) => {
+        throw e;
+      });
   }
 
   async find(id: BattleId): Promise<Maybe<Battle>> {

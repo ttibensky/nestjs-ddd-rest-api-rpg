@@ -7,9 +7,10 @@ import {
 } from '@nestjs/swagger';
 import { CharacterFactory } from 'src/modules/rpg/domain/model/character/CharacterFactory';
 import { CharacterJobStats } from 'src/modules/rpg/domain/model/character/CharacterJobStats';
+import { CharacterJobStatsView } from './view/CharacterJobStatsView';
 
 @ApiTags('job')
-@ApiExtraModels(CharacterJobStats)
+@ApiExtraModels(CharacterJobStatsView)
 @Controller('job')
 export class JobsController {
   @ApiResponse({
@@ -17,14 +18,22 @@ export class JobsController {
     schema: {
       type: 'array',
       items: {
-        $ref: getSchemaPath(CharacterJobStats),
+        $ref: getSchemaPath(CharacterJobStatsView),
       },
     },
   })
   @Get()
-  findAll(): CharacterJobStats[] {
+  findAll(): CharacterJobStatsView[] {
     return Array.from(CharacterFactory.jobs(), ([, character]) =>
       character.stats(),
-    );
+    ).map((jobStats: CharacterJobStats) => ({
+      job: jobStats.job,
+      maximumHealthPoints: jobStats.maximumHealthPoints.toString(),
+      baseStrength: jobStats.baseStrength.toString(),
+      baseDexterity: jobStats.baseDexterity.toString(),
+      baseIntelligence: jobStats.baseIntelligence.toString(),
+      damageModifier: jobStats.damageModifier.toString(),
+      speedModifier: jobStats.speedModifier.toString(),
+    }));
   }
 }

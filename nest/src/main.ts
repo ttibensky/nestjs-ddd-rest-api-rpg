@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { DebugHttpExceptionFilter } from './lib/common/infrastructure/delivery/http/filter/DebugHttpExceptionFilter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -17,6 +18,11 @@ async function bootstrap() {
 
   // request body validation
   app.useGlobalPipes(new ValidationPipe());
+
+  // include exception details in the response body while on local/test environment
+  if (process.env.ENV === 'local') {
+    app.useGlobalFilters(new DebugHttpExceptionFilter());
+  }
 
   // Swagger API docs
   const config = new DocumentBuilder().build();

@@ -45,7 +45,7 @@ It utilizes:
 - run `task down up logs` to restart the project and start tailing logs from all containers
 - run `task down && sudo rm -rf mongo/data && task up` to re-seed database and start the project
 - run `task npm <your-arguments>` to execute npm command inside the `nest` container; examples:
-  - `task npm -- run test`
+  - `clear && task npm -- run test`
   - `task npm -- install -g thanks`
 
 ### Endpoints & URLs

@@ -1,60 +1,52 @@
 import { INestApplication } from '@nestjs/common';
-import { Test, TestingModule } from '@nestjs/testing';
-import { AppModule } from 'src/app.module';
 import * as request from 'supertest';
+import initNest from 'test/e2e/jestHelper';
 
-describe('JobsController', () => {
+describe('JobController', () => {
   let app: INestApplication;
 
   beforeEach(async () => {
-    const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [AppModule],
-    }).compile();
-
-    app = moduleFixture.createNestApplication();
-    await app.init();
+    app = await initNest();
   });
 
-  it('/job (GET)', () => {
+  it('/job (GET) 200', () => {
     return request(app.getHttpServer())
       .get('/job')
       .expect(200)
       .expect([
         {
           job: 'warrior',
-          maximumHealthPoints: { value: 20 },
-          baseStrength: { value: 10 },
-          baseDexterity: { value: 5 },
-          baseIntelligence: { value: 5 },
-          damageModifier: { value: '80% of strength, 20% of dexterity' },
-          speedModifier: { value: '60% of dexterity, 20% of intelligence' },
+          maximumHealthPoints: '20',
+          baseStrength: '10',
+          baseDexterity: '5',
+          baseIntelligence: '5',
+          damageModifier: '80% of strength, 20% of dexterity',
+          speedModifier: '60% of dexterity, 20% of intelligence',
         },
         {
           job: 'thief',
-          maximumHealthPoints: { value: 15 },
-          baseStrength: { value: 4 },
-          baseDexterity: { value: 10 },
-          baseIntelligence: { value: 4 },
-          damageModifier: {
-            value: '25% of strength, 100% of dexterity, 25% of intelligence',
-          },
-          speedModifier: { value: '80% of dexterity' },
+          maximumHealthPoints: '15',
+          baseStrength: '4',
+          baseDexterity: '10',
+          baseIntelligence: '4',
+          damageModifier:
+            '25% of strength, 100% of dexterity, 25% of intelligence',
+          speedModifier: '80% of dexterity',
         },
         {
           job: 'mage',
-          maximumHealthPoints: { value: 12 },
-          baseStrength: { value: 5 },
-          baseDexterity: { value: 6 },
-          baseIntelligence: { value: 10 },
-          damageModifier: {
-            value: '20% of strength, 20% of dexterity, 120% of intelligence',
-          },
-          speedModifier: { value: '40% of dexterity, 10% of strength' },
+          maximumHealthPoints: '12',
+          baseStrength: '5',
+          baseDexterity: '6',
+          baseIntelligence: '10',
+          damageModifier:
+            '20% of strength, 20% of dexterity, 120% of intelligence',
+          speedModifier: '40% of dexterity, 10% of strength',
         },
       ]);
   });
 
   afterAll(async () => {
-    await app?.close();
+    await app.close();
   });
 });

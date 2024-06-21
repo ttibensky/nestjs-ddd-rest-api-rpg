@@ -137,9 +137,6 @@ Ran all test suites.
 
 ## Lessons learned
 
-- I need to read the instructions better and do not forget what it says
-  - I had MongoDB database in place and connected to everything, then I read the instructions again only to see I should have used in-memory storage
-  - I hope this won't become an issue
 - I went into an issue with class inheritance and types with `Character` class and it's children, resulting into using a union type for its child classes
   - Next time, I would try to use object literals, types and function constructors instead of classes
   - Object literals would also allow to use destructuring and spread operator for object manipulation

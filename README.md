@@ -1,6 +1,6 @@
-# Neo RPG
+# Nest.js REST API RPG
 
-This repository is a result of [takehome assignment](./neo-financial-instructions.pdf) for a role at Neo Financial.
+This is an example backend for an RPG turn-based game.
 It utilizes:
 
 - languages:
